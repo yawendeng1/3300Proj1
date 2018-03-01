@@ -8,20 +8,6 @@
 <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
 <style type="text/css">
 
-
-/* Style for Custom Tooltip */
-/*div.tooltip {   
- 	position: absolute;           
-	text-align: center;           
-	width: 60px;                  
-	height: 28px;                 
-	padding: 2px;             
-	font: 12px sans-serif;        
-	background: white;   
-	border: 0px;      
-	border-radius: 8px;           
-	pointer-events: none;         
-}    */ 
 /* Legend Font Style */
 body {
 /*	font: 11px sans-serif;*/
@@ -71,9 +57,7 @@ https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html
 		
 Malcolm Maclean, tooltips example tutorial
 http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
-
-Mike Bostock, Pie Chart Legend
-http://bl.ocks.org/mbostock/3888852  */
+ */
 
 		
 //Width and height of map
@@ -91,9 +75,6 @@ var path = d3.geoPath()               // path generator that will convert GeoJSO
 
 		
 // Define linear scale for output
-// var color = d3.scale.linear()
-// 			  .range(["rgb(213,222,217)","rgb(69,173,168)","rgb(84,36,55)","rgb(217,91,67)"]);
-
 color = d3.scaleLinear()
       .interpolate(d3.interpolateHcl)
       .range([d3.rgb("#f2f6f7"), d3.rgb('#0142aa')]);
@@ -112,7 +93,7 @@ var div = d3.select("#usMap")
 
 // Load in my states data!
 d3.csv("MH16.csv", function(data) {
-// color.domain([0,1,2,3]); // setting the range of the input data
+
 color.domain([1, 21]);
 // Load GeoJSON data and merge with states data
 d3.json("us-states.json", function(json) {
