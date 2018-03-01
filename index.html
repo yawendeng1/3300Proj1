@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.5/d3-legend.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<style type="text/css">
+
+
+/* Style for Custom Tooltip */
+/*div.tooltip {   
+ 	position: absolute;           
+	text-align: center;           
+	width: 60px;                  
+	height: 28px;                 
+	padding: 2px;             
+	font: 12px sans-serif;        
+	background: white;   
+	border: 0px;      
+	border-radius: 8px;           
+	pointer-events: none;         
+}    */ 
+/* Legend Font Style */
+body {
+/*	font: 11px sans-serif;*/
+	font-family: "Open Sans Condensed"; text-align: center; 
+}
+
+h1 { 
+	font-family: "Open Sans Condensed"; text-transform: uppercase; font-weight: 200; font-size: 36pt; padding: 0; margin: 0; }
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.label{
+  font-family: Verdana;
+}
+
+svg { 
+	border: solid #ccc 1px; 
+}
+
+text {
+	font-family: "Open Sans Condensed"; text-transform: uppercase;
+}
+        
+
+</style>
+</head>
+<body>
+	<div id="usMap">
+	<h1>Average Number of Days Not Happy by State</h1>
+	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
+	</div>
+	<div id="heatMap">
+		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
+	</div>
+
+<script type="text/javascript">
+
+/*  This visualization was made possible by modifying code provided by:
+
+Scott Murray, Choropleth example from "Interactive Data Visualization for the Web" 
+https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html   
+		
+Malcolm Maclean, tooltips example tutorial
+http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
+
+Mike Bostock, Pie Chart Legend
+http://bl.ocks.org/mbostock/3888852  */
+
+		
+//Width and height of map
+var width = 960;
+var height = 500;
+
+// D3 Projection
+var projection = d3.geoAlbersUsa()
+				   .translate([width/2, height/2])    // translate to center of screen
+				   .scale([1000]);          // scale things down so see entire US
+        
+// Define path generator
+var path = d3.geoPath()               // path generator that will convert GeoJSON to SVG paths
+		  	 .projection(projection);  // tell path generator to use albersUsa projection
+
+		
+// Define linear scale for output
+// var color = d3.scale.linear()
+// 			  .range(["rgb(213,222,217)","rgb(69,173,168)","rgb(84,36,55)","rgb(217,91,67)"]);
+
+color = d3.scaleLinear()
+      .interpolate(d3.interpolateHcl)
+      .range([d3.rgb("#f2f6f7"), d3.rgb('#0142aa')]);
+
+//Create SVG element and append map to the SVG
+var svg = d3.select("#usMap")
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height);
+        
+// Append Div for tooltip to SVG
+var div = d3.select("#usMap")
+		    .append("div")   
+    		.attr("class", "tooltip")               
+    		.style("opacity", 0);
+
+// Load in my states data!
+d3.csv("MH16.csv", function(data) {
+// color.domain([0,1,2,3]); // setting the range of the input data
+color.domain([1, 21]);
+// Load GeoJSON data and merge with states data
+d3.json("us-states.json", function(json) {
+
+// Loop through each state data value in the .csv file
+for (var i = 0; i < data.length; i++) {
+
+	// Grab State Name
+	var dataState = data[i].state;
+
+	// Grab data value 
+	var dataValue = data[i].mhn;
+
+	// Find the corresponding state inside the GeoJSON
+	for (var j = 0; j < json.features.length; j++)  {
+		var jsonState = json.features[j].properties.name;
+
+		if (dataState == jsonState) {
+
+		// Copy the data value into the JSON
+		json.features[j].properties.visited = dataValue; 
+
+		// Stop looking through the JSON
+		break;
+		}
+	}
+}
+		
+// Bind the data to the SVG and create one path per GeoJSON feature
+svg.selectAll("path")
+	.data(json.features)
+	.enter()
+	.append("path")
+	.attr("d", path)
+	.style("stroke", "#fff")
+	.style("stroke-width", "1")
+	.style("fill", function(d) {
+
+	// Get data value
+	var value = d.properties.visited;
+
+	if (value) {
+	//If value exists…
+	return color(value);
+	} else {
+	//If value is undefined…
+	return "rgb(213,222,217)";
+	}
+});
+
+// Color legend.
+
+      var colorLegend = d3.legendColor()
+        .labelFormat(d3.format(".0f"))
+        .scale(color)
+        .shapePadding(5)
+        .shapeWidth(50)
+        .shapeHeight(20)
+        .labelOffset(12);
+
+        svg.append("g")
+        .attr("transform", function(d, i) { return "translate(850," + (i * 20 + 300)+ ")"; })
+        .call(colorLegend);
+	});
+
+});
+
+var margin = { top: 20, right: 100, bottom: 100, left: 100 },
+          width = 960 - margin.left - margin.right,
+          height = 600 - margin.top - margin.bottom,
+          gridSize = Math.floor(Math.min(height/13, width / 16)),
+          colors = ["#f2f0f7","#54278f"];
+var ageValues = Array(13);
+var sleepValues = Array(16)
+
+for(var i=0; i<ageValues.length; i++) {
+	ageValues[i] = 18 + i*5;
+}
+
+for (var i=0; i<sleepValues.length; i++) {
+	sleepValues[i] = i;
+}
+
+
+var svg2 = d3.select("#heatMap").append("svg")
+			.attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var ageLabels = svg2.selectAll("ageLabel")
+					.data(ageValues)
+					.enter().append("text")
+					.attr("class", "label")
+					.text(function(d) {return d; })
+					.attr("x", 0)
+					.attr("y", function(d, i) {return (ageValues.length - i)*gridSize; })
+					.style("text-anchor", "middle")
+				    .style("dominant-baseline", "middle")
+				    .style("font-size", "12")
+				    .attr("transform", "translate(-20," + (gridSize / 2 * -1) + ")");
+
+
+var yLabel = svg2.append("text")
+              .attr("class", "label")
+              .text("Age")
+              .attr("x", -50)
+              .attr("y", ageValues.length/2 * gridSize)
+              .style("text-anchor", "middle")
+              .style("dominant-baseline", "middle")
+              .style("font-size", "20")
+              .attr("transform", "rotate(-90, -50," + ageValues.length/2 * gridSize +" )");
+
+
+//create x axis labels
+var xLabel = svg2.append("text")
+  .attr("class", "label")
+  .text("Sleep")
+  .attr("x", sleepValues.length/2 * gridSize)
+  .attr("y", ageValues.length * gridSize)
+  .style("text-anchor", "middle")
+  .style("dominant-baseline", "middle")
+  .style("font-size", "20")
+  .attr("transform", "translate(0,40)");
+
+var sleepLabels = svg2.selectAll("sleepLabel")
+  .data(sleepValues)
+  .enter().append("text")
+    .attr("class", "label")
+    .text(function(d) { return d+1; })
+    .attr("x", function(d, i) { return i * gridSize; })
+    .attr("y", gridSize*13)
+    .style("text-anchor", "middle")
+    .style("font-size", "12")
+    .attr("transform", "translate(" + gridSize / 2 + ", 15)");
+
+    function parseline(d) {
+    	return {
+    		age: d.age,
+    		sleep: d.sleep,
+    		mh: d.mh
+    	};
+    }
+
+    d3.csv("MH.csv", parseline, function(error, data) {
+    	var heatmap =svg2.selectAll("crashes")
+    	.data(data)
+    	.enter().append("rect")
+    	.attr("x", function(d) { return ((d.sleep-1)*gridSize); })
+    	.attr("y", function(d) { return (ageValues.length - d.age)*gridSize; })
+    	.attr("rx", 6)
+    	.attr("ry", 6)
+    	.attr("width", gridSize)
+    	.attr("height", gridSize)
+    	.attr("stroke", "#E6E6E6")
+    	.style("fill", function(d) { return color(d.mh); })
+
+    	heatmap.append("title").text(function(d) { return d.mh; });
+
+
+    	var crashesScale = d3.scaleLinear().domain(color.domain())
+              .range([ageValues.length * gridSize + 0, 0]);
+
+         var crashesAxis = d3.axisRight()
+              .scale(crashesScale);
+
+         svg2.append("g")
+                  .attr("class", "axis")
+                  .attr("font-size", "14")
+                  .attr("transform", "translate(" + (width -55) + ", 0)")
+                  .call(crashesAxis);
+
+        var crashLabel = svg2.append("text")
+              .attr("class", "label")
+              .text("Number of days not happy")
+              .attr("x", width)
+              .attr("y", ageValues.length/2 * gridSize)
+              .style("text-anchor", "middle")
+              .style("dominant-baseline", "middle")
+              .style("font-size", "20")
+              .attr("transform","rotate(90,"+ (width) + "," + ageValues.length/2 * gridSize +" )");
+
+        var gradient = svg2.append("defs")
+            .append("linearGradient")
+              .attr("id", "gradient")
+              .attr("x1", "0%")
+              .attr("y1", "0%")
+              .attr("x2", "0%")
+              .attr("y2", "100%")
+              .attr("spreadMethod", "pad");
+
+
+          gradient.append("stop")
+              .attr("offset", "0%")
+              .attr("stop-color", '#0142aa')
+              .attr("stop-opacity", 1);
+
+          gradient.append("stop")
+              .attr("offset", "100%")
+              .attr("stop-color", "#f2f6f7")
+              .attr("stop-opacity", 1);
+
+        svg2.append("rect")
+              .attr("x", width - 100)
+              .attr("y", 0)
+              .attr("width", gridSize)
+              .attr("height", ageValues.length * gridSize)
+              .style("fill", "url(#gradient)");
+
+
+    });
+
+
+</script>
+
+
+</body>
+</html>
