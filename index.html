@@ -11,10 +11,10 @@
 /* Legend Font Style */
 body {
 /*	font: 11px sans-serif;*/
-	font-family: "Open Sans Condensed"; text-align: center; 
+	font-family: "Open Sans Condensed"; text-align: center;
 }
 
-h1 { 
+h1 {
 	font-family: "Open Sans Condensed"; text-transform: uppercase; font-weight: 200; font-size: 36pt; padding: 0; margin: 0; }
 }
 
@@ -28,14 +28,18 @@ h1 {
   font-family: Verdana;
 }
 
-svg { 
-	border: solid #ccc 1px; 
+svg {
+	border: solid #ccc 1px;
 }
 
 text {
 	font-family: "Open Sans Condensed"; text-transform: uppercase;
 }
-        
+
+/* .state text {
+  font: 12px sans-serif;
+  text-anchor: middle;
+} */
 
 </style>
 </head>
@@ -48,119 +52,124 @@ text {
 		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
 	</div>
 
+<script id="grid" type="text/plain">
+                              ME
+               WI          VT NH
+WA ID MT ND MN IL MI    NY MA
+OR NV WY SD IA IN OH PA NJ CT RI
+CA UT CO NE MO KY WV VA MD DE
+   AZ NM KS AR TN NC SC
+         OK LA MS AL GA
+HI AK    TX             FL
+</script>
+
 <script type="text/javascript">
 
 /*  This visualization was made possible by modifying code provided by:
 
-Scott Murray, Choropleth example from "Interactive Data Visualization for the Web" 
-https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html   
-		
+Scott Murray, Choropleth example from "Interactive Data Visualization for the Web"
+https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html
+
 Malcolm Maclean, tooltips example tutorial
 http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
  */
 
-		
+
 //Width and height of map
 var width = 960;
 var height = 500;
-
-// D3 Projection
-var projection = d3.geoAlbersUsa()
-				   .translate([width/2, height/2])    // translate to center of screen
-				   .scale([1000]);          // scale things down so see entire US
-        
-// Define path generator
-var path = d3.geoPath()               // path generator that will convert GeoJSON to SVG paths
-		  	 .projection(projection);  // tell path generator to use albersUsa projection
-
-		
-// Define linear scale for output
-color = d3.scaleLinear()
-      .interpolate(d3.interpolateHcl)
-      .range([d3.rgb("#f2f6f7"), d3.rgb('#0142aa')]);
-
 //Create SVG element and append map to the SVG
 var svg = d3.select("#usMap")
 			.append("svg")
 			.attr("width", width)
 			.attr("height", height);
-        
-// Append Div for tooltip to SVG
-var div = d3.select("#usMap")
-		    .append("div")   
-    		.attr("class", "tooltip")               
-    		.style("opacity", 0);
 
-// Load in my states data!
-d3.csv("MH16.csv", function(data) {
+var states = [];
 
-color.domain([1, 21]);
-// Load GeoJSON data and merge with states data
-d3.json("us-states.json", function(json) {
+d3.select("#grid").text().split("\n").forEach(function(line, i) {
+  var re = /\w+/g, m;
+  while (m = re.exec(line)) states.push({
+    name: m[0],
+    x: m.index / 3,
+    y: i
+  });
+});
 
-// Loop through each state data value in the .csv file
-for (var i = 0; i < data.length; i++) {
+// Define linear scale for output
+color = d3.scaleLinear()
+     .interpolate(d3.interpolateHcl)
+     .range([d3.rgb("#f2f6f7"), d3.rgb('#0142aa')])
+		 .domain([1, 21]);
 
-	// Grab State Name
-	var dataState = data[i].state;
+var gridWidth = d3.max(states, function(d) { return d.x; }) + 1,
+		gridHeight = d3.max(states, function(d) { return d.y; }) + 1,
+	  cellSize = 40;
 
-	// Grab data value 
-	var dataValue = data[i].mhn;
+var mData;
+		 // Load in my states data!
+d3.csv("MH16_1.csv", function(data) {
+     mData = data;
 
-	// Find the corresponding state inside the GeoJSON
-	for (var j = 0; j < json.features.length; j++)  {
-		var jsonState = json.features[j].properties.name;
+		 // Loop through each state data value in the .csv file
+		 for (var i = 0; i < mData.length; i++) {
 
-		if (dataState == jsonState) {
+		 	// Grab State Name
+		 	var dataState = mData[i].ss;
 
-		// Copy the data value into the JSON
-		json.features[j].properties.visited = dataValue; 
+		 	// Grab data value
+		 	var dataValue = mData[i].mhn;
 
-		// Stop looking through the JSON
-		break;
+		 	// Find the corresponding state inside the GeoJSON
+		 	for (var j = 0; j < states.length; j++)  {
+		 		var StateId = states[j].name;
+
+		 		if (dataState == StateId) {
+
+		 		// Copy the data value into the JSON
+		 		states[j].mhn = dataValue;
+		 		// Stop looking through the JSON
+		 		break;
+		 		}
+		 	}
 		}
-	}
-}
-		
-// Bind the data to the SVG and create one path per GeoJSON feature
-svg.selectAll("path")
-	.data(json.features)
-	.enter()
-	.append("path")
-	.attr("d", path)
-	.style("stroke", "#fff")
-	.style("stroke-width", "1")
-	.style("fill", function(d) {
 
-	// Get data value
-	var value = d.properties.visited;
+		 var state = svg.append("g")
+		 	          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+		 	          .selectAll(".state")
+		 	          .data(states)
+		 	          .enter().append("g")
+		 	          .attr("transform", function(d) { return "translate(" + (d.x - gridWidth / 2) * cellSize + "," + (d.y - gridHeight / 2) * cellSize + ")"; });
 
-	if (value) {
-	//If value exists…
-	return color(value);
-	} else {
-	//If value is undefined…
-	return "rgb(213,222,217)";
-	}
+		 state.append("rect")
+		 	   .attr("x", -cellSize / 2)
+		 	   .attr("y", -cellSize / 2)
+		 	   .attr("width", cellSize - 1)
+		 	   .attr("height", cellSize - 1)
+				 .style("fill", function(d) { return color(d.mhn)});
+		 		 //.style("fill","#dedede")
+
+		 state.append("text")
+		 		 .attr("dy", ".25em")
+		 		 .attr("dx", "-.25em")
+		 		 .text(function(d) { return d.name; })
+		 		 .style("fill", "white");
+
+		 // Color legend.
+
+		       var colorLegend = d3.legendColor()
+		         .labelFormat(d3.format(".0f"))
+		         .scale(color)
+		         .shapePadding(5)
+		         .shapeWidth(50)
+		         .shapeHeight(20)
+		         .labelOffset(12);
+
+		         svg.append("g")
+		         .attr("transform", function(d, i) { return "translate(850," + (i * 20 + 300)+ ")"; })
+		         .call(colorLegend);
 });
 
-// Color legend.
-
-      var colorLegend = d3.legendColor()
-        .labelFormat(d3.format(".0f"))
-        .scale(color)
-        .shapePadding(5)
-        .shapeWidth(50)
-        .shapeHeight(20)
-        .labelOffset(12);
-
-        svg.append("g")
-        .attr("transform", function(d, i) { return "translate(850," + (i * 20 + 300)+ ")"; })
-        .call(colorLegend);
-	});
-
-});
-
+// ------------------------------------ HeatMap ------------------
 var margin = { top: 20, right: 100, bottom: 100, left: 100 },
           width = 960 - margin.left - margin.right,
           height = 600 - margin.top - margin.bottom,
@@ -244,8 +253,8 @@ var sleepLabels = svg2.selectAll("sleepLabel")
     	.enter().append("rect")
     	.attr("x", function(d) { return ((d.sleep-1)*gridSize); })
     	.attr("y", function(d) { return (ageValues.length - d.age)*gridSize; })
-    	.attr("rx", 6)
-    	.attr("ry", 6)
+    	.attr("rx", 3)
+    	.attr("ry", 3)
     	.attr("width", gridSize)
     	.attr("height", gridSize)
     	.attr("stroke", "#E6E6E6")
