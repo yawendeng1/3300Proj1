@@ -270,7 +270,7 @@ var sleepLabels = svg2.selectAll("sleepLabel")
     }
 
     d3.csv("MH.csv", parseline, function(error, data) {
-    	var heatmap =svg2.selectAll("crashes")
+    	var heatmap =svg2.selectAll("slpt_mthlth")
     	.data(data)
     	.enter().append("rect")
     	.attr("x", function(d) { return ((d.sleep-1)*gridSize); })
@@ -285,17 +285,17 @@ var sleepLabels = svg2.selectAll("sleepLabel")
     	heatmap.append("title").text(function(d) { return d.mh; });
 
 
-    	var crashesScale = d3.scaleLinear().domain(color.domain())
+    	var slpt_mthlthScale = d3.scaleLinear().domain(color.domain())
               .range([ageValues.length * gridSize + 0, 0]);
 
-         var crashesAxis = d3.axisRight()
-              .scale(crashesScale);
+         var slpt_mthlthAxis = d3.axisRight()
+              .scale(slpt_mthlthScale);
 
          svg2.append("g")
                   .attr("class", "axis")
                   .attr("font-size", "14")
                   .attr("transform", "translate(" + (width2 -55) + ", 0)")
-                  .call(crashesAxis);
+                  .call(slpt_mthlthAxis);
 
         var crashLabel = svg2.append("text")
               .attr("class", "label")
@@ -349,6 +349,13 @@ var sleepLabels = svg2.selectAll("sleepLabel")
 
 </div>
 
+<div id="habit">
+	<div class="habit-text text">
+		explain text
+	</div>
+
+</div>
+
 <h1>causuals for unhappiness</h1>
 
 <div id="casuals" class = "causual">
@@ -360,18 +367,18 @@ var sleepLabels = svg2.selectAll("sleepLabel")
 
 <script>
 // plot 1
-var genderSvg = d3.select("#gender").append("svg")
-	.attr("id","genderSvg")
+var habitSvg = d3.select("#habit").append("svg")
+	.attr("id","habitSvg")
 	.attr("width","600")
-	.attr("height","500");
+	.attr("height","200");
 
 
 // construct path for male
-var humanPath = genderSvg.append("clipPath")
-.attr("id","humanPath");
+var habitPath = habitSvg.append("clipPath")
+.attr("id","habitPath");
 
 
-var cigar_1 = humanPath.append("path")
+var cigar_1 = habitPath.append("path")
 .attr("d","M28.325 16.822V21.392L22.949 29.514 17.573 37.654 17.611 87.786 17.669 137.936 33.682 137.994 49.694 138.032 49.618 127.338 49.541 116.624 50.712 116.566 51.883 116.509 51.998 123.574C52.075 127.453 52.133 132.31 52.133 134.326V138.032H69.797V37.443L64.997 30.205 60.197 22.947V12.272H28.325V16.822ZM59.813 23.005C59.813 23.734 59.909 24.214 60.082 24.349 60.312 24.541 59.64 25.654 56.05 31.069L51.749 37.558V67.568H49.253V39.536H19.685V37.04L34.334 37.002 48.965 36.944 53.093 30.704 57.24 24.464 43.109 24.368 28.997 24.272 28.939 23.062 28.882 21.872H59.813V23.005ZM52.133 106.717C52.133 108.483 52.075 110.346 52.018 110.845L51.883 111.728H49.637V103.472H52.133V106.717ZM329.189 19.856V27.44L337.022 27.478 344.837 27.536 344.894 29.974 344.952 32.432H357.029V37.04H353.63L353.515 41.494C353.438 43.952 353.381 46.64 353.381 47.446V48.944H357.797V37.424H359.717V48.944H363.922L363.979 43.126C364.018 39.939 364.018 35.754 363.979 33.814L363.941 30.32H357.029V19.76H345.509V12.272H329.189V19.856ZM142.181 16.208V19.568H122.405V29.936H113.957V49.136H121.08L120.965 66.934C120.907 76.746 120.83 96.637 120.773 111.171L120.658 137.61 137.035 137.725C146.04 137.802 157.79 137.878 163.128 137.898L172.843 137.936 172.958 133.923C173.035 131.715 173.093 127.798 173.093 125.226V120.56H184.363L184.478 111.478C184.555 106.506 184.613 92.509 184.613 80.374V58.352H173.285V49.136H182.693V25.136H178.085V12.848H142.181V16.208ZM168.485 50.288V51.44H142.181V49.136H168.485V50.288ZM178.795 72.118C178.718 75.69 178.661 86.403 178.661 95.926V113.264H173.093V99.958C173.093 92.662 173.15 81.949 173.227 76.15L173.342 65.648H178.91L178.795 72.118ZM133.925 87.152V105.2H131.429V69.104H133.925V87.152ZM148.325 76.746C148.325 80.95 148.267 89.072 148.19 94.794L148.075 105.2H145.579L145.694 97.962C145.771 93.987 145.829 85.866 145.829 79.914V69.104H148.325V76.746ZM162.859 74.71C162.782 77.802 162.725 85.923 162.725 92.758V105.2H160.229V95.926C160.229 90.838 160.286 82.717 160.363 77.878L160.478 69.104H162.974L162.859 74.71ZM232.421 20.432V28.016L240.254 28.054 248.069 28.112 248.126 30.55 248.184 33.008H260.261V38H231.845L231.883 42.454 231.941 46.928 246.398 46.986 260.837 47.024V38H267.173V30.896H260.261V20.528L254.462 20.49 248.645 20.432 248.587 16.63 248.549 12.848H232.421V20.432ZM311.333 42.992V48.944H351.653V37.04H311.333V42.992ZM231.883 93.814 231.941 137.936 246.398 137.994 260.837 138.032V49.712H231.845L231.883 93.814ZM311.064 74.422C311.006 87.19 310.91 106.602 310.853 117.603L310.757 137.59 321.278 137.706C327.058 137.782 338.827 137.84 347.429 137.859H363.077L363.134 129.872 363.173 121.904H374.443L374.558 117.43C374.635 114.992 374.693 101.955 374.712 88.496L374.731 64.016 369.048 63.958 363.365 63.92V51.498L348.926 51.382C340.997 51.306 329.246 51.248 322.853 51.248H311.179L311.064 74.422ZM368.875 81.334C368.798 87.133 368.741 97.059 368.741 103.414V114.992H363.173V107.158C363.173 102.858 363.23 92.931 363.307 85.078L363.422 70.832H368.99L368.875 81.334ZM324.005 90.704V107.504H321.509V91.587C321.509 82.851 321.566 75.286 321.624 74.787L321.758 73.904H324.005V90.704ZM338.405 85.482C338.405 91.856 338.347 99.421 338.27 102.282L338.155 107.504H335.659L335.774 105.334C335.851 104.163 335.909 96.598 335.909 88.534V73.904H338.405V85.482ZM352.901 74.096C352.958 74.192 352.958 81.757 352.882 90.896L352.747 107.504H350.251L350.366 94.966C350.443 88.093 350.501 80.528 350.501 78.166V73.904H351.634C352.267 73.904 352.843 73.981 352.901 74.096Z");
 
 // stacked bars
@@ -399,7 +406,7 @@ var stacked = stack(habbit_data);
 
 // plotting stack
 var height = 250;
-var width = genderSvg.attr("width");
+var width = habitSvg.attr("width");
 
 var maxY = d3.max(stacked, function(d) {
 return d3.max(d, function(d) {
@@ -427,16 +434,16 @@ var colorScale = d3.scaleLinear()
 
 
 // bind a <g> tag for each layer
-var male_layers = genderSvg.selectAll('g.male_layers')
+var habit_layers = habitSvg.selectAll('g.habit_layers')
 .data(stacked, function(d) { return d.key; })
 .enter()
 .append('g')
-.attr('class', 'male_layers')
+.attr('class', 'habit_layers')
 .attr('fill', function(d, i) { return colorScale(i); })
 
 var right_padding = 200;
 // bind a <rect> to each value inside the layer
-var male_bars = male_layers.selectAll('male_layers')
+var habit_bars = habit_layers.selectAll('habit_layers')
 .data(function(d) { return d; })
 .enter()
 .append('rect')
@@ -449,7 +456,7 @@ return y(d[1]);}))
 return y(d[0]) - y(d[1]);
 })
 // .attr("clip-path","url(#fmPath)")
-.attr("clip-path","url(#humanPath)");
+.attr("clip-path","url(#habitPath)");
 
 
 var textScale = d3.scaleLinear()
@@ -475,12 +482,89 @@ var genderLegend = d3.legendColor()
 			.shapeHeight(20)
 			.labelOffset(12);
 
-			genderSvg.append("g")
+			habitSvg.append("g")
 			.attr("transform", function(d, i) { return "translate(500," + (i * 20 + 20)+ ")"; })
 			.call(genderLegend);
 
 //https://square.github.io/intro-to-d3/examples/
 
+</script>
+
+<script>
+var genderSvg = d3.select("#gender").append("svg")
+	.attr("id","genderSvg")
+	.attr("width","600")
+	.attr("height","200");
+
+// construct path for male
+var humanPath = genderSvg.append("clipPath")
+.attr("id","humanPath");
+
+var fm = humanPath.append("path")
+.attr("d","M158.4 23.887C151 31.287 144.925 37.488 144.925 37.613 144.925 37.762 151.05 43.988 158.55 51.488L172.175 65.113 185.825 51.463 199.475 37.813 186.125 24.462C178.8 17.113 172.575 10.962 172.325 10.762 171.925 10.438 170.75 11.537 158.4 23.887ZM40.35 24.438C32.975 31.813 26.925 37.988 26.925 38.113 26.925 38.262 33.05 44.488 40.55 51.988L54.175 65.613 67.675 52.113C75.1 44.688 81.175 38.512 81.175 38.363 81.175 38.113 54.175 10.988 53.925 10.988 53.85 10.988 47.75 17.037 40.35 24.438ZM29.425 126.488 29.425 185.988 37 185.938 44.55 185.863 44.625 167.763C44.675 153.638 44.75 149.588 45 149.438 45.4 149.188 63.45 149.188 63.85 149.438 64.1 149.588 64.175 153.638 64.225 167.763L64.3 185.863 71.325 185.938 78.35 185.988 78.475 126.688C78.55 94.063 78.575 67.288 78.5 67.163 78.45 67.063 67.375 66.988 53.9 66.988L29.425 66.988 29.425 126.488ZM162.05 67.788C161.975 67.963 161.9 75.938 161.85 85.488L161.8 102.863 160.225 107.238C159.35 109.637 158.225 112.913 157.675 114.488 157.125 116.063 156 119.338 155.175 121.738 154.35 124.137 153.225 127.413 152.675 128.988 152.125 130.563 151 133.838 150.175 136.238 149.35 138.638 148.225 141.913 147.675 143.488 147.125 145.063 146 148.338 145.175 150.738 144.35 153.138 143.225 156.413 142.675 157.988 142.125 159.563 141 162.838 140.175 165.238 139.35 167.638 138.225 170.913 137.675 172.488 137.125 174.063 136 177.338 135.175 179.738 133.3 185.088 133.175 185.488 133.175 186.038 133.175 186.463 135.175 186.488 173.975 186.438 213.225 186.363 214.8 186.338 214.875 185.913 214.925 185.663 214.725 184.838 214.45 184.088 214.15 183.338 213.7 182.088 213.4 181.288 213.1 180.513 212.775 179.638 212.675 179.363 212.475 178.888 212.15 177.963 210.925 174.613 209.7 171.263 209.375 170.338 209.175 169.863 208.975 169.388 208.65 168.463 207.425 165.113 207.15 164.363 206.7 163.113 206.425 162.363 205.2 159.013 204.875 158.088 204.675 157.613 204.475 157.138 204.15 156.213 202.925 152.863 201.7 149.513 201.375 148.588 201.175 148.113 200.975 147.638 200.65 146.713 199.425 143.363 198.225 140.038 197.875 139.088 197.675 138.613 197.575 138.338 197.35 137.713 197.175 137.238 197 136.763 196.775 136.138 196.675 135.863 196.475 135.388 196.125 134.438 194.925 131.113 193.7 127.762 193.375 126.838 193.175 126.363 192.975 125.887 192.65 124.963 191.425 121.613 190.2 118.262 189.875 117.338 189.675 116.863 189.475 116.387 189.15 115.463 187.925 112.113 187.65 111.363 187.2 110.113 186.925 109.363 185.35 105.012 185.275 104.813 184.7 103.413 184.5 102.913 184.425 97.637 184.425 85.413 184.425 72.262 184.35 68.012 184.125 67.788 183.675 67.338 162.2 67.363 162.05 67.788Z");
+
+// stacked bars
+// data and data processing
+var gender_data = [
+{  1: 0.525, 2: 0.137, 3: 0.091, 4: 0.048, 5: 0.199},
+{  1: 0.516, 2: 0.144, 3: 0.094, 4: 0.052, 5: 0.194}
+];
+
+  var stack = d3.stack()
+  .keys(["5", "4", "3", "2", "1"])
+  //"1", "2", "3", "4", "5"
+
+  var stacked = stack(gender_data);
+
+  // plotting stack
+  var height = 250;
+  var width = genderSvg.attr("width");
+
+  var maxY = d3.max(stacked, function(d) {
+  return d3.max(d, function(d) {
+  return d[1];
+  });
+  });
+
+
+  var x = d3.scaleLinear()
+    .range([0, 100])
+    .domain([0,1]);
+
+  //y scale
+  var y = d3.scaleLinear()
+  .domain([0, maxY])
+  .range([185, 10]);
+
+
+  var colorScale = d3.scaleLinear()
+  .domain([0,4])
+  .range(['#164480','#A0D1FA']);
+
+
+  // bind a <g> tag for each layer
+  var male_layers = genderSvg.selectAll('g.male_layers')
+  .data(stacked, function(d) { return d.key; })
+  .enter()
+  .append('g')
+  .attr('class', 'male_layers')
+  .attr('fill', function(d, i) { return colorScale(i); })
+
+  // bind a <rect> to each value inside the layer
+  var male_bars = male_layers.selectAll('male_layers')
+  .data(function(d) { return d; })
+  .enter()
+  .append('rect')
+  .attr('x', function(d, i) {
+      return x(i);})
+  .attr('width', width / 4)
+  .attr('y', (function(d) {
+  return y(d[1]);}))
+  .attr('height', function(d) {
+  return y(d[0]) - y(d[1]);
+  })
+  // .attr("clip-path","url(#fmPath)")
+  .attr("clip-path","url(#humanPath)");
 </script>
 
 <script>
