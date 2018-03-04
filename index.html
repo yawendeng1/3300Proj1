@@ -359,15 +359,6 @@ var sleepLabels = svg2.selectAll("sleepLabel")
 
 </div>
 
-<h1>causuals for unhappiness</h1>
-
-<div id="casuals" class = "causual">
-	<div class="causual casuals-text">
-		explain text
-	</div>
-</div>
-
-
 <script>
 // plot 1
 var habitSvg = d3.select("#habit").append("svg")
@@ -568,100 +559,6 @@ var gender_data = [
   })
   // .attr("clip-path","url(#fmPath)")
   .attr("clip-path","url(#humanPath)");
-</script>
-
-<script>
-// plot 2
-var cauSvg = d3.select("#casuals").append("svg")
-.attr("id","genderSvg")
-.attr("width","600")
-.attr("height","1000");
-
-
-var unhappy = [
-{"days":1,"Sleep":8,"Support":93},
-{"days":2,"Sleep":8,"Support":93},
-{"days":3,"Sleep":8.5,"Support":86},
-{"days":4,"Sleep":7.5,"Support":87},
-{"days":5,"Sleep":7,"Support":54},
-{"days":6,"Sleep":6,"Support":37},
-{"days":7,"Sleep":6.5,"Support":15},
-{"days":8,"Sleep":7.5,"Support":87},
-{"days":9,"Sleep":7,"Support":54},
-{"days":10,"Sleep":6,"Support":37},
-{"days":11,"Sleep":8,"Support":93},
-{"days":12,"Sleep":8,"Support":93},
-{"days":13,"Sleep":8.5,"Support":86},
-{"days":14,"Sleep":7.5,"Support":87},
-{"days":15,"Sleep":7,"Support":54},
-{"days":16,"Sleep":6,"Support":37},
-{"days":17,"Sleep":6.5,"Support":15},
-{"days":18,"Sleep":7.5,"Support":87},
-{"days":19,"Sleep":7,"Support":54},
-{"days":20,"Sleep":6,"Support":37},
-{"days":21,"Sleep":8,"Support":93},
-{"days":22,"Sleep":8,"Support":93},
-{"days":23,"Sleep":8.5,"Support":86},
-{"days":24,"Sleep":7.5,"Support":87},
-{"days":25,"Sleep":7,"Support":54},
-{"days":26,"Sleep":6,"Support":37},
-{"days":27,"Sleep":6.5,"Support":15},
-{"days":28,"Sleep":7.5,"Support":87},
-{"days":29,"Sleep":7,"Support":54},
-{"days":30,"Sleep":6,"Support":37}
-];
-
-cauSvg.append("text")
-.attr("x", 170).attr("y", 20)
-.style("fill", "#ccc")
-.text("2018");
-
-
-var width = cauSvg.attr("width");
-var height = cauSvg.attr("height");
-var sleepScale = d3.scaleLinear()
-.domain([5,10])
-.range([width/2, width-30]); // start at the middle, end near (but not at) the right margin
-
-var dayScale = d3.scaleLinear()
-.domain([1,30]) // using the length of the longer array
-.range([20, height-20]);
-
-
-var supportScale = d3.scaleLinear()
-.domain([0,100])
-// .domain([d3.min(unhappy, function(d) { return d.Sleep; }),
-// d3.max(unhappy, function(d) { return d.Sleep; })])
-.range([30, width/2]); // start at the middle, end near (but not at) the right margin
-
-
-var opScale =  d3.scaleLinear()
-.domain([1,30]) // using the length of the longer array
-.range([0.4, 1]);
-
-unhappy.forEach(function (d, i) {
-	cauSvg.append("line")
-	.attr("x1", width/2)
-	.attr("x2", sleepScale(d.Sleep)) // shorter than what we did in class (via CI)
-	.attr("y1", dayScale(i)) // For the height, use the index
-	.attr("y2", dayScale(i))
-	.style("stroke", "#25A7F0")
-	.style("stroke-width", 10)
-	.style("opacity", opScale(i));
-
-
-	cauSvg.append("line")
-	.attr("x1", width/2 - supportScale(d.Support))
-	.attr("x2", width/2)
-	.attr("y1", dayScale(i)) // For the height, use the index
-	.attr("y2", dayScale(i))
-	.style("stroke", "#FA7471")
-	.style("stroke-width", 20)
-	.style("opacity", opScale(i));
-});
-
-
-
 </script>
 
 </body>
