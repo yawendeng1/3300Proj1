@@ -1,69 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<script src="http://d3js.org/d3.v4.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.5/d3-legend.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+	<title>Mosaic</title>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.5/d3-legend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js">
+  </script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <style type="text/css">
+  /* Legend Font Style */
+     body {
+			 font-family: "Open Sans Condensed";
+			 /* text-align: center; */
+		 }
+     h1 {
+			 font-family: "Open Sans Condensed";
+			 text-transform: uppercase;
+			 font-weight: 200;
+			 font-size: 36pt;
+			 padding: 0;
+			 margin: 0;
+		 }
+     .axis path, .axis line {
+			 fill: none;
+			 stroke: #000;
+			 shape-rendering: crispEdges;
+		 }
+     .label{
+			 font-family: "Open Sans Condensed";
+		 }
+		 svg {
+			 border: solid #ccc 1px;
+		 }
+		 text {
+			 font-family: "Open Sans Condensed";
+			 text-transform: uppercase;
+		 }
+		 div {
+			 margin: 30px;
+		 }
+     h3{
+			 text-align:center;
+			 margin-top:20px;
+		 }
+     .text{
+			 width:650px;
+			 margin:auto;
+			 margin-bottom:30px;
+			 font-size:13px;
+			 text-align: center;
+		 }
+		 div.fixed {
+			 position: fixed;
+			 bottom: 0;
+			 right: 0;
+			 width: 100px;
+			 border: 3px solid #ccc;
+		 }
+   </style>
 
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-<style type="text/css">
-
-/* Legend Font Style */
-body {
-	font-family: "Open Sans Condensed";
-	text-align: center;
-}
-
-h1 {
-	font-family: "Open Sans Condensed";
-	text-transform: uppercase;
-	font-weight: 200;
-	font-size: 36pt;
-	padding: 0;
-	margin: 0;
-}
-
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.label{
-  font-family: "Open Sans Condensed";
-}
-
-svg {
-	border: solid #ccc 1px;
-}
-
-text {
-	font-family: "Open Sans Condensed";
-	text-transform: uppercase;
-	text-align: center;
-}
-
-div {
-  margin: 30px;
-}
-h3{
-  text-align:center;
-  margin-top:20px;
-}
-
-.text{
-  width:650px;
-  margin:auto;
-  margin-bottom:30px;
-  font-size:13px;
-	text-align: center;
-}
-
-</style>
 </head>
+
 <body>
+	<p id="title"><h1>Title Here</h1></p>
+	<p id="subtitle"><h2>SubsTitle Here</h2></p>
 	<div id="usMap">
 	<h1>Average Number of Days Not Happy by State</h1>
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
@@ -72,9 +74,8 @@ h3{
 		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
 	</div>
 
-
-//--------------------State Grid Map -------------------
-//textscript of the grid_map
+<!-- State Grid Map -->
+<!-- textscript of the grid_map -->
 <script id="grid" type="text/plain">
                               ME
                WI          VT NH
@@ -98,7 +99,7 @@ http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
  */
 
 //Width and height of grid_map
-var width1 = 960;
+var width1 = 660;
 var height1 = 500;
 
 //Create SVG element and append grid_map to the SVG
@@ -159,12 +160,12 @@ d3.csv("MH16_1.csv", function(data) {
 		}
 
     var state = svg.append("g")
-		            .attr("class","mapGrid")
-		 	          .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")")
-		 	          .selectAll(".state")
-		 	          .data(states)
-		 	          .enter().append("g")
-		 	          .attr("transform", function(d) { return "translate(" + (d.x - gridWidth / 2) * cellSize + "," + (d.y - gridHeight / 2) * cellSize + ")"; });
+		    .attr("class","mapGrid")
+		 	  .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")")
+		 	  .selectAll(".state")
+		 	  .data(states)
+		 	  .enter().append("g")
+		 	  .attr("transform", function(d) { return "translate(" + (d.x - gridWidth/ 2) * cellSize + "," + (d.y - gridHeight / 2) * cellSize + ")"; });
 
 		 state.append("rect")
 		 	   .attr("x", -cellSize / 2)
@@ -192,8 +193,10 @@ d3.csv("MH16_1.csv", function(data) {
 		    .attr("transform", function(d, i) { return "translate(850," + (i * 20 + 300)+ ")"; })
 		    .call(colorLegend);
 });
+</script>
 
-// ------------------------------------ HeatMap ------------------
+<!-- Heatmap: SleepTime and Mental Health -->
+<script>
 var width2 = 960;
 var height2 = 500;
 
@@ -203,6 +206,7 @@ var margin = { top: 20, right: 100, bottom: 100, left: 100 },
     gridSize = Math.floor(Math.min(height2/13, width2 / 16)),
     colors = ["#f2f0f7","#54278f"];
 
+//arrays storing the value of 13 age groups and 16 sleep groups
 var ageValues = Array(13);
 var sleepValues = Array(16)
 
@@ -220,8 +224,7 @@ var svg2 = d3.select("#heatMap").append("svg")
 			.append("g")
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-
+//create y axis labels
 var ageLabels = svg2.selectAll("ageLabel")
 					.data(ageValues)
 					.enter().append("text")
@@ -230,21 +233,19 @@ var ageLabels = svg2.selectAll("ageLabel")
 					.attr("x", 0)
 					.attr("y", function(d, i) {return (ageValues.length - i)*gridSize; })
 					.style("text-anchor", "middle")
-				    .style("dominant-baseline", "middle")
-				    .style("font-size", "12")
-				    .attr("transform", "translate(-20," + (gridSize / 2 * -1) + ")");
-
+				  .style("dominant-baseline", "middle")
+				  .style("font-size", "12")
+				  .attr("transform", "translate(-20," + (gridSize / 2 * -1) + ")");
 
 var yLabel = svg2.append("text")
-              .attr("class", "label")
-              .text("Age")
-              .attr("x", -50)
-              .attr("y", ageValues.length/2 * gridSize)
-              .style("text-anchor", "middle")
-              .style("dominant-baseline", "middle")
-              .style("font-size", "20")
-              .attr("transform", "rotate(-90, -50," + ageValues.length/2 * gridSize +" )");
-
+                 .attr("class", "label")
+                 .text("Age")
+                 .attr("x", -50)
+                 .attr("y", ageValues.length/2 * gridSize)
+                 .style("text-anchor", "middle")
+                 .style("dominant-baseline", "middle")
+                 .style("font-size", "20")
+                 .attr("transform", "rotate(-90, -50," + ageValues.length/2 * gridSize +" )");
 
 //create x axis labels
 var xLabel = svg2.append("text")
@@ -268,15 +269,17 @@ var sleepLabels = svg2.selectAll("sleepLabel")
     .style("font-size", "12")
     .attr("transform", "translate(" + gridSize / 2 + ", 15)");
 
-    function parseline(d) {
+// [paseline(d)] create object for every row of d
+function parseline(d) {
     	return {
     		age: d.age,
     		sleep: d.sleep,
     		mh: d.mh
     	};
-    }
+  }
 
-    d3.csv("MH.csv", parseline, function(error, data) {
+//callback function
+d3.csv("MH.csv", parseline, function(error, data) {
     	var heatmap =svg2.selectAll("slpt_mthlth")
     	.data(data)
     	.enter().append("rect")
@@ -291,91 +294,86 @@ var sleepLabels = svg2.selectAll("sleepLabel")
 
     	heatmap.append("title").text(function(d) { return d.mh; });
 
-
     	var slpt_mthlthScale = d3.scaleLinear().domain(color.domain())
               .range([ageValues.length * gridSize + 0, 0]);
 
-         var slpt_mthlthAxis = d3.axisRight()
+      var slpt_mthlthAxis = d3.axisRight()
               .scale(slpt_mthlthScale);
 
-         svg2.append("g")
-                  .attr("class", "axis")
-                  .attr("font-size", "14")
-                  .attr("transform", "translate(" + (width2 -55) + ", 0)")
-                  .call(slpt_mthlthAxis);
+      svg2.append("g")
+          .attr("class", "axis")
+          .attr("font-size", "14")
+          .attr("transform", "translate(" + (width2 -55) + ", 0)")
+          .call(slpt_mthlthAxis);
 
-        var crashLabel = svg2.append("text")
-              .attr("class", "label")
-              .text("Number of days not happy")
-              .attr("x", width2)
-              .attr("y", ageValues.length/2 * gridSize)
-              .style("text-anchor", "middle")
-              .style("dominant-baseline", "middle")
-              .style("font-size", "20")
-              .attr("transform","rotate(90,"+ (width2) + "," + ageValues.length/2 * gridSize +" )");
+      var crashLabel = svg2.append("text")
+          .attr("class", "label")
+          .text("Number of days not happy")
+          .attr("x", width2)
+          .attr("y", ageValues.length/2 * gridSize)
+          .style("text-anchor", "middle")
+          .style("dominant-baseline", "middle")
+          .style("font-size", "20")
+          .attr("transform","rotate(90,"+ (width2) + "," + ageValues.length/2 * gridSize +" )");
 
-        var gradient = svg2.append("defs")
-            .append("linearGradient")
-              .attr("id", "gradient")
-              .attr("x1", "0%")
-              .attr("y1", "0%")
-              .attr("x2", "0%")
-              .attr("y2", "100%")
-              .attr("spreadMethod", "pad");
-
-
-          gradient.append("stop")
-              .attr("offset", "0%")
-              .attr("stop-color", '#0142aa')
-              .attr("stop-opacity", 1);
-
-          gradient.append("stop")
-              .attr("offset", "100%")
-              .attr("stop-color", "#f2f6f7")
-              .attr("stop-opacity", 1);
-
-        svg2.append("rect")
-              .attr("x", width2 - 100)
-              .attr("y", 0)
-              .attr("width", gridSize)
-              .attr("height", ageValues.length * gridSize)
-              .style("fill", "url(#gradient)");
+      var gradient = svg2.append("defs")
+          .append("linearGradient")
+          .attr("id", "gradient")
+          .attr("x1", "0%")
+          .attr("y1", "0%")
+          .attr("x2", "0%")
+          .attr("y2", "100%")
+          .attr("spreadMethod", "pad");
 
 
+      gradient.append("stop")
+          .attr("offset", "0%")
+          .attr("stop-color", '#0142aa')
+          .attr("stop-opacity", 1);
+
+      gradient.append("stop")
+          .attr("offset", "100%")
+          .attr("stop-color", "#f2f6f7")
+          .attr("stop-opacity", 1);
+
+      svg2.append("rect")
+          .attr("x", width2 - 100)
+          .attr("y", 0)
+          .attr("width", gridSize)
+          .attr("height", ageValues.length * gridSize)
+          .style("fill", "url(#gradient)");
     });
 
 
 </script>
 
 <h1>Gender and Mental Health</h1>
-
 <div id="gender">
 	<div class="gender-text text">
 		explain text
 	</div>
-
 </div>
 
+<h1>Habit and Mental Health</h1>
 <div id="habit">
 	<div class="habit-text text">
 		explain text
 	</div>
-
 </div>
 
+<!-- Smoke, Alcohol consumption(Habit) & Mental Health -->
+<!-- Reference - https://square.github.io/intro-to-d3/examples/ -->
 <script>
-// plot 1
 var habitSvg = d3.select("#habit").append("svg")
 	.attr("id","habitSvg")
 	.attr("width","600")
 	.attr("height","200");
 
-
-// construct path for male
+// construct path for habit
 var habitPath = habitSvg.append("clipPath")
-.attr("id","habitPath");
+  .attr("id","habitPath");
 
-
+//path for smoking
 var cigar_1 = habitPath.append("path")
 .attr("d","M28.325 16.822V21.392L22.949 29.514 17.573 37.654 17.611 87.786 17.669 137.936 33.682 137.994 49.694 138.032 49.618 127.338 49.541 116.624 50.712 116.566 51.883 116.509 51.998 123.574C52.075 127.453 52.133 132.31 52.133 134.326V138.032H69.797V37.443L64.997 30.205 60.197 22.947V12.272H28.325V16.822ZM59.813 23.005C59.813 23.734 59.909 24.214 60.082 24.349 60.312 24.541 59.64 25.654 56.05 31.069L51.749 37.558V67.568H49.253V39.536H19.685V37.04L34.334 37.002 48.965 36.944 53.093 30.704 57.24 24.464 43.109 24.368 28.997 24.272 28.939 23.062 28.882 21.872H59.813V23.005ZM52.133 106.717C52.133 108.483 52.075 110.346 52.018 110.845L51.883 111.728H49.637V103.472H52.133V106.717ZM329.189 19.856V27.44L337.022 27.478 344.837 27.536 344.894 29.974 344.952 32.432H357.029V37.04H353.63L353.515 41.494C353.438 43.952 353.381 46.64 353.381 47.446V48.944H357.797V37.424H359.717V48.944H363.922L363.979 43.126C364.018 39.939 364.018 35.754 363.979 33.814L363.941 30.32H357.029V19.76H345.509V12.272H329.189V19.856ZM142.181 16.208V19.568H122.405V29.936H113.957V49.136H121.08L120.965 66.934C120.907 76.746 120.83 96.637 120.773 111.171L120.658 137.61 137.035 137.725C146.04 137.802 157.79 137.878 163.128 137.898L172.843 137.936 172.958 133.923C173.035 131.715 173.093 127.798 173.093 125.226V120.56H184.363L184.478 111.478C184.555 106.506 184.613 92.509 184.613 80.374V58.352H173.285V49.136H182.693V25.136H178.085V12.848H142.181V16.208ZM168.485 50.288V51.44H142.181V49.136H168.485V50.288ZM178.795 72.118C178.718 75.69 178.661 86.403 178.661 95.926V113.264H173.093V99.958C173.093 92.662 173.15 81.949 173.227 76.15L173.342 65.648H178.91L178.795 72.118ZM133.925 87.152V105.2H131.429V69.104H133.925V87.152ZM148.325 76.746C148.325 80.95 148.267 89.072 148.19 94.794L148.075 105.2H145.579L145.694 97.962C145.771 93.987 145.829 85.866 145.829 79.914V69.104H148.325V76.746ZM162.859 74.71C162.782 77.802 162.725 85.923 162.725 92.758V105.2H160.229V95.926C160.229 90.838 160.286 82.717 160.363 77.878L160.478 69.104H162.974L162.859 74.71ZM232.421 20.432V28.016L240.254 28.054 248.069 28.112 248.126 30.55 248.184 33.008H260.261V38H231.845L231.883 42.454 231.941 46.928 246.398 46.986 260.837 47.024V38H267.173V30.896H260.261V20.528L254.462 20.49 248.645 20.432 248.587 16.63 248.549 12.848H232.421V20.432ZM311.333 42.992V48.944H351.653V37.04H311.333V42.992ZM231.883 93.814 231.941 137.936 246.398 137.994 260.837 138.032V49.712H231.845L231.883 93.814ZM311.064 74.422C311.006 87.19 310.91 106.602 310.853 117.603L310.757 137.59 321.278 137.706C327.058 137.782 338.827 137.84 347.429 137.859H363.077L363.134 129.872 363.173 121.904H374.443L374.558 117.43C374.635 114.992 374.693 101.955 374.712 88.496L374.731 64.016 369.048 63.958 363.365 63.92V51.498L348.926 51.382C340.997 51.306 329.246 51.248 322.853 51.248H311.179L311.064 74.422ZM368.875 81.334C368.798 87.133 368.741 97.059 368.741 103.414V114.992H363.173V107.158C363.173 102.858 363.23 92.931 363.307 85.078L363.422 70.832H368.99L368.875 81.334ZM324.005 90.704V107.504H321.509V91.587C321.509 82.851 321.566 75.286 321.624 74.787L321.758 73.904H324.005V90.704ZM338.405 85.482C338.405 91.856 338.347 99.421 338.27 102.282L338.155 107.504H335.659L335.774 105.334C335.851 104.163 335.909 96.598 335.909 88.534V73.904H338.405V85.482ZM352.901 74.096C352.958 74.192 352.958 81.757 352.882 90.896L352.747 107.504H350.251L350.366 94.966C350.443 88.093 350.501 80.528 350.501 78.166V73.904H351.634C352.267 73.904 352.843 73.981 352.901 74.096Z");
 
@@ -407,69 +405,62 @@ var height = 250;
 var width = habitSvg.attr("width");
 
 var maxY = d3.max(stacked, function(d) {
-return d3.max(d, function(d) {
-return d[1];
+    return d3.max(d, function(d) {
+       return d[1];
+    });
 });
-});
-
 
 var x = d3.scaleLinear()
 	.range([0, 100])
 	.domain([0,1]);
 
-
 //y scale
 var yStart = 12;
 var y = d3.scaleLinear()
-.domain([0, maxY])
-.range([yStart+125.76, yStart]);
+   .domain([0, maxY])
+   .range([yStart+125.76, yStart]);
 
-
-//var color = d3.scaleOrdinal(d3.schemeCategory10);
 var colorScale = d3.scaleLinear()
-.domain([0,4])
-.range(['#164480','#A0D1FA']);
-
+   .domain([0,4])
+   .range(['#164480','#A0D1FA']);
 
 // bind a <g> tag for each layer
 var habit_layers = habitSvg.selectAll('g.habit_layers')
-.data(stacked, function(d) { return d.key; })
-.enter()
-.append('g')
-.attr('class', 'habit_layers')
-.attr('fill', function(d, i) { return colorScale(i); })
+   .data(stacked, function(d) { return d.key; })
+   .enter()
+   .append('g')
+   .attr('class', 'habit_layers')
+   .attr('fill', function(d, i) { return colorScale(i); })
 
 var right_padding = 200;
+
 // bind a <rect> to each value inside the layer
 var habit_bars = habit_layers.selectAll('habit_layers')
-.data(function(d) { return d; })
-.enter()
-.append('rect')
-.attr('x', function(d, i) {
-		return x(i);})
-.attr('width', (width - right_padding)/4)
-.attr('y', (function(d) {
-return y(d[1]);}))
-.attr('height', function(d) {
-return y(d[0]) - y(d[1]);
-})
-// .attr("clip-path","url(#fmPath)")
-.attr("clip-path","url(#habitPath)");
-
+    .data(function(d) { return d; })
+   .enter()
+   .append('rect')
+   .attr('x', function(d, i) {
+		  return x(i);})
+   .attr('width', (width - right_padding)/4)
+   .attr('y', (function(d) {
+      return y(d[1]);}))
+   .attr('height', function(d) {
+      return y(d[0]) - y(d[1]);
+		})
+   .attr("clip-path","url(#habitPath)");
 
 var textScale = d3.scaleLinear()
 .domain([0,4])
 .range(["1-6","7-12", "13-18", "19-24", "25-30"]);
 
-
 var colorList = [];
 for (var i = 0; i <= 4; i++) {
-colorList.push(colorScale(i));
+   colorList.push(colorScale(i));
 }
+
 var legendScale = d3.scaleOrdinal()
-.domain(["1-6","7-12", "13-18", "19-24", "25-30"])
-.range(colorList.reverse());
-// .range(['#A0D1FA','#A0D1FA','#A0D1FA','#A0D1FA','#164480']);
+   .domain(["1-6","7-12", "13-18", "19-24", "25-30"])
+   .range(colorList.reverse());
 
 //add lengend
 var genderLegend = d3.legendColor()
@@ -483,16 +474,14 @@ var genderLegend = d3.legendColor()
 			habitSvg.append("g")
 			.attr("transform", function(d, i) { return "translate(500," + (i * 20 + 20)+ ")"; })
 			.call(genderLegend);
-
-//https://square.github.io/intro-to-d3/examples/
-
 </script>
 
+<!-- Gender & Mental Health -->
 <script>
 var genderSvg = d3.select("#gender").append("svg")
-	.attr("id","genderSvg")
-	.attr("width","600")
-	.attr("height","200");
+	  .attr("id","genderSvg")
+	  .attr("width","600")
+	  .attr("height","200");
 
 // construct path for male
 var humanPath = genderSvg.append("clipPath")
@@ -508,48 +497,45 @@ var gender_data = [
 {  1: 0.516, 2: 0.144, 3: 0.094, 4: 0.052, 5: 0.194}
 ];
 
-  var stack = d3.stack()
+var stack = d3.stack()
   .keys(["5", "4", "3", "2", "1"])
   //"1", "2", "3", "4", "5"
 
-  var stacked = stack(gender_data);
+var stacked = stack(gender_data);
 
   // plotting stack
-  var height = 250;
-  var width = genderSvg.attr("width");
+var height = 250;
+var width = genderSvg.attr("width");
 
-  var maxY = d3.max(stacked, function(d) {
-  return d3.max(d, function(d) {
-  return d[1];
-  });
-  });
+var maxY = d3.max(stacked, function(d) {
+	return d3.max(d, function(d) {
+		return d[1];
+	});
+});
 
-
-  var x = d3.scaleLinear()
-    .range([0, 100])
-    .domain([0,1]);
+var x = d3.scaleLinear()
+  .range([0, 100])
+  .domain([0,1]);
 
   //y scale
-  var y = d3.scaleLinear()
+var y = d3.scaleLinear()
   .domain([0, maxY])
   .range([185, 10]);
 
-
-  var colorScale = d3.scaleLinear()
+var colorScale = d3.scaleLinear()
   .domain([0,4])
   .range(['#164480','#A0D1FA']);
 
-
-  // bind a <g> tag for each layer
-  var male_layers = genderSvg.selectAll('g.male_layers')
+// bind a <g> tag for each layer
+var male_layers = genderSvg.selectAll('g.male_layers')
   .data(stacked, function(d) { return d.key; })
   .enter()
   .append('g')
   .attr('class', 'male_layers')
   .attr('fill', function(d, i) { return colorScale(i); })
 
-  // bind a <rect> to each value inside the layer
-  var male_bars = male_layers.selectAll('male_layers')
+// bind a <rect> to each value inside the layer
+var male_bars = male_layers.selectAll('male_layers')
   .data(function(d) { return d; })
   .enter()
   .append('rect')
@@ -559,9 +545,7 @@ var gender_data = [
   .attr('y', (function(d) {
   return y(d[1]);}))
   .attr('height', function(d) {
-  return y(d[0]) - y(d[1]);
-  })
-  // .attr("clip-path","url(#fmPath)")
+  return y(d[0]) - y(d[1]);})
   .attr("clip-path","url(#humanPath)");
 </script>
 
