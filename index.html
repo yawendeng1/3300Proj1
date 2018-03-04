@@ -22,7 +22,7 @@ h1 {
 	font-weight: 200;
 	font-size: 36pt;
 	padding: 0;
-	margin: 0; }
+	margin: 0;
 }
 
 .axis path, .axis line {
@@ -72,6 +72,9 @@ h3{
 		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
 	</div>
 
+
+//--------------------State Grid Map -------------------
+//textscript of the grid_map
 <script id="grid" type="text/plain">
                               ME
                WI          VT NH
@@ -94,16 +97,17 @@ Malcolm Maclean, tooltips example tutorial
 http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
  */
 
-
-//Width and height of map
+//Width and height of grid_map
 var width1 = 960;
 var height1 = 500;
-//Create SVG element and append map to the SVG
+
+//Create SVG element and append grid_map to the SVG
 var svg = d3.select("#usMap")
 			.append("svg")
 			.attr("width", width1)
 			.attr("height", height1);
 
+//states is an array of textscript of the grid_map
 var states = [];
 
 d3.select("#grid").text().split("\n").forEach(function(line, i) {
@@ -126,7 +130,8 @@ var gridWidth = d3.max(states, function(d) { return d.x; }) + 1,
 	  cellSize = 40;
 
 var mData;
-		 // Load in my states data!
+
+// Load data for every state!
 d3.csv("MH16_1.csv", function(data) {
      mData = data;
 
@@ -136,24 +141,24 @@ d3.csv("MH16_1.csv", function(data) {
 		 	// Grab State Name
 		 	var dataState = mData[i].ss;
 
-		 	// Grab data value
+		 	// Grab number of days for mental health variable
 		 	var dataValue = mData[i].mhn;
 
-		 	// Find the corresponding state inside the GeoJSON
+		 	// Find the corresponding state inside the data
 		 	for (var j = 0; j < states.length; j++)  {
 		 		var StateId = states[j].name;
 
 		 		if (dataState == StateId) {
 
-		 		// Copy the data value into the JSON
+		 		// Copy the data value into the states array
 		 		states[j].mhn = dataValue;
-		 		// Stop looking through the JSON
+		 		// Stop looking through the states array
 		 		break;
 		 		}
 		 	}
 		}
 
-		 var state = svg.append("g")
+    var state = svg.append("g")
 		            .attr("class","mapGrid")
 		 	          .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")")
 		 	          .selectAll(".state")
@@ -175,8 +180,7 @@ d3.csv("MH16_1.csv", function(data) {
 		 		 .style("fill", "white");
 
 		 // Color legend.
-
-		       var colorLegend = d3.legendColor()
+		 var colorLegend = d3.legendColor()
 		         .labelFormat(d3.format(".0f"))
 		         .scale(color)
 		         .shapePadding(5)
@@ -184,9 +188,9 @@ d3.csv("MH16_1.csv", function(data) {
 		         .shapeHeight(20)
 		         .labelOffset(12);
 
-		         svg.append("g")
-		         .attr("transform", function(d, i) { return "translate(850," + (i * 20 + 300)+ ")"; })
-		         .call(colorLegend);
+		 svg.append("g")
+		    .attr("transform", function(d, i) { return "translate(850," + (i * 20 + 300)+ ")"; })
+		    .call(colorLegend);
 });
 
 // ------------------------------------ HeatMap ------------------
@@ -194,10 +198,10 @@ var width2 = 960;
 var height2 = 500;
 
 var margin = { top: 20, right: 100, bottom: 100, left: 100 },
-          width2 = width2 - margin.left - margin.right,
-          height2 = height2 - margin.top - margin.bottom,
-          gridSize = Math.floor(Math.min(height2/13, width2 / 16)),
-          colors = ["#f2f0f7","#54278f"];
+    width2 = width2 - margin.left - margin.right,
+    height2 = height2 - margin.top - margin.bottom,
+    gridSize = Math.floor(Math.min(height2/13, width2 / 16)),
+    colors = ["#f2f0f7","#54278f"];
 
 var ageValues = Array(13);
 var sleepValues = Array(16)
