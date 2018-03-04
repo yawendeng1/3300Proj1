@@ -118,8 +118,8 @@ d3.select("#grid").text().split("\n").forEach(function(line, i) {
 // Define linear scale for output
 color = d3.scaleLinear()
      .interpolate(d3.interpolateHcl)
-     .range([d3.rgb("#f2f6f7"), d3.rgb('#0142aa')])
-		 .domain([1, 21]);
+     .range([d3.rgb("#f2f6f7"), d3.rgb("#110080")])
+		 .domain([6.5, 25]);
 
 var gridWidth = d3.max(states, function(d) { return d.x; }) + 1,
 		gridHeight = d3.max(states, function(d) { return d.y; }) + 1,
