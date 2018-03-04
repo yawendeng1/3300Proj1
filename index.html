@@ -40,7 +40,9 @@ svg {
 }
 
 text {
-	font-family: "Open Sans Condensed"; text-transform: uppercase;
+	font-family: "Open Sans Condensed";
+	text-transform: uppercase;
+	text-align: center;
 }
 
 div {
@@ -56,6 +58,7 @@ h3{
   margin:auto;
   margin-bottom:30px;
   font-size:13px;
+	text-align: center;
 }
 
 </style>
@@ -167,7 +170,7 @@ d3.csv("MH16_1.csv", function(data) {
 
 		 state.append("text")
 		 		 .attr("dy", ".25em")
-		 		 .attr("dx", "-.25em")
+				 .style("text-anchor","middle")
 		 		 .text(function(d) { return d.name; })
 		 		 .style("fill", "white");
 
