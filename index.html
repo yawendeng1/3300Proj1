@@ -33,13 +33,15 @@
 			 font-family: "Open Sans Condensed";
 		 }
 		 /*svg {
-			 border: solid #ccc 1px;
-		 }*/
+		 	/*word-wrap : break-word;*/
+			 /*border: solid #ccc 1px;*/
+		 /*}*/
 		 text {
 			 font-family: "Open Sans Condensed";
 			 /* text-transform: uppercase; */
 		 }
 		 div {
+
 			 /*border: 2px solid #ccc;*/
 			 /* text-align:center; */
 		 }
@@ -89,26 +91,30 @@
 </head>
 
 <body>
-	<p id="title"><h1>2016-DIVE INTO MENTAL HEALTH</h1>
+	<p id="title"><h1>DIVE INTO MENTAL HEALTH 2016</h1>
 		<h2 style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
+		<h3>Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016</h3>
 	</p>
 	<p id="subtitle"><h2>Overivew</h2></p>
 	<svg class = "sessionT" width = "900", height = "60">
 		<rect class = "inplot_text" x="0", y = "3" width="20" height="20"/>
-		<text x="40" y="22" style = "font-weight:100;font-size:22pt">
+		<text x="40" y="22" style = "font-weight:100;font-size:18pt">
 			Average Days Not Happy</text>
-		<text x="40" y="55" style = "font-size:12pt">
-			This graph shows the mental health condition of US Resident per state, as the average number of days not happy within 30 days, for the year 2016.</text>
+		<text x="40" y="55" style = "font-size:14pt">
+			This map shows the mental health status of US Resident per state, as the average number of days not happy within 30 days.</text>
 	</svg>
 	<div id="usMap" >
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
 	</div>
 
 	<p id="subtitle"><h2>Factors Behind Mental Health</h2></p>
-	<svg width = "900", height = "50">
+	<svg width = "900", height = "60">
 		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
-		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
+		<text x="40" y="22" style = "font-weight:100;font-size:18pt">
 			Sleep vs. Age</text>
+		<text x="40" y="55" style = "font-size:14pt">
+			This graph shows the number of days not happy within 30 days caused by hours of sleep 1-16 per day, with age 18-78.
+		</text>
 	</svg>
 	<div id="heatMap">
 	</div>
@@ -117,12 +123,18 @@
 		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
 		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
 			Gender</text>
-		<rect class = "inplot_text" x="420", y = "15" width="20" height="20"/>
-		<text x="460" y="33" style = "font-weight:100;font-size:18pt">
-			Habit</text>
+		<!-- <rect class = "inplot_text" x="420", y = "15" width="20" height="20"/>
+		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
+			Habit</text> -->
 	</svg>
 	<div id="factor">
      <div id="icons_div"> </div>
+     <svg width="200" height="40">
+     <rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
+		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
+			Smoking/Drinking</text>
+	</svg>
+     <div id="icons_div2"> </div>
      <div class="explain" id="factor_explain">
      The data is categorized into five bins. Gender does not play important role. For habit,
   	 </div>
@@ -342,7 +354,7 @@ d3.csv("MH16_1.csv", function(data) {
 <!-- Heatmap: SleepTime and Mental Health -->
 <script>
 var width2 = 760;
-var height2 = 500;
+var height2 = 600;
 
 var margin = { top: 20, right: 100, bottom: 100, left: 100 },
     width2 = width2 - margin.left - margin.right,
@@ -394,7 +406,7 @@ var yLabel = svg2.append("text")
 //create x axis labels
 var xLabel = svg2.append("text")
   .attr("class", "label")
-  .text("Sleep")
+  .text("Sleep(hrs)")
   .attr("x", sleepValues.length/2 * gridSize)
   .attr("y", ageValues.length * gridSize)
   .style("text-anchor", "middle")
@@ -444,21 +456,33 @@ d3.csv("MH.csv", parseline, function(error, data) {
 			var colorGridSize = 18;
 			var colorGrid = [];
 
-			for(var i = 6; i < 26; i++){
-				svg2.append("rect")
-						.attr("x", 545)
-						.attr("y", (i-6)*(colorGridSize+1)-2)
-						.attr("width", colorGridSize)
-						.attr("height", colorGridSize)
-						.style("fill", color(i+0.5));
+			// for(var i = 6; i < 26; i++){
+			// 	svg2.append("rect")
+			// 			.attr("x", 545)
+			// 			.attr("y", (i-6)*(colorGridSize+1)-2)
+			// 			.attr("width", colorGridSize)
+			// 			.attr("height", colorGridSize)
+			// 			.style("fill", color(i+0.5));
 
-				if(i%3 == 0) {
-					svg2.append("text")
-							.attr("x", 575)
-							.attr("y", (i-6)*(colorGridSize+1)+13)
-							.text(i + " days");
-				}
-			}
+			// 	if(i%3 == 0) {
+			// 		svg2.append("text")
+			// 				.attr("x", 575)
+			// 				.attr("y", (i-6)*(colorGridSize+1)+13)
+			// 				.text(i + " days");
+			// 	}
+			// }
+
+			var colorLegend = d3.legendColor()
+		         .labelFormat(d3.format(".0f"))
+		         .scale(color)
+		         .shapePadding(5)
+		         .shapeWidth(20)
+		         .shapeHeight(20)
+		         .labelOffset(12);
+
+		 svg2.append("g")
+		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 329)+ ")"; })
+		    .call(colorLegend);
     });
 
 
@@ -491,17 +515,24 @@ d3.csv("MH.csv", parseline, function(error, data) {
 		];
 
 
-		var widths = [160, 110, 170, 140, 170, 120];
+		var widths = [160, 140, 170, 220, 170, 120];
 		var icon_lg_svg_width = 110;
-		var labels = ["male", "female", "not smoker/drink", "drinker only","smoker only", "smoker and drinker"];
-		 var label_offset = [5, 12, 0, 25, 5, 0];
+		var labels = ["male", "female", "not smoker/drinker", "drinker only","smoker only", "smoker and drinker"];
+		 var label_offset = [27, 32, 0, 25, 5, 0];
 
 
 		for (var k = 0; k <= 5; k++) {
 			var sub_data = [factor_data[k]];
-			var divContainer = d3.select("#icons_div").append("div")
-			.attr("class","icon_container")
-			.attr("id", "icon" + k);
+			var divContainer;
+			if (k <=1) {
+				divContainer = d3.select("#icons_div").append("div")
+				.attr("class","icon_container")
+				.attr("id", "icon" + k);
+			} else {
+				divContainer = d3.select("#icons_div2").append("div")
+				.attr("class","icon_container")
+				.attr("id", "icon" + k);
+			}
 
 
 			var sub_svg = divContainer.append("svg")
@@ -514,17 +545,16 @@ d3.csv("MH.csv", parseline, function(error, data) {
 			var subPath = sub_svg.append("clipPath")
 					.attr("id", paths_ids[k]);
 
-			if (k>=2){
+			
 				var singlePath = d3.select("#"+paths_ids[k]).append("path")
 						.attr("d",paths[k])
 						.attr("transform","translate(20, 0)");
 
-			}
-			else{
-				var singlePath = d3.select("#"+paths_ids[k]).append("path")
-						.attr("d",paths[k]);
+			
+			// 	var singlePath = d3.select("#"+paths_ids[k]).append("path")
+			// 			.attr("d",paths[k]);
 
-			}
+			// }
 
 
 
@@ -601,7 +631,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 					.attr("width",icon_lg_svg_width)
 					.attr("height","200");
 
-				 var texts = ["1-6 ","7-12 ", "13-18 days", "19-24 ", "25-30 "];
+				 var texts = ["1-6 ","7-12 ", "13-18", "19-24 ", "25-30 "];
 
 				 var colorList = [];
 					for (var i = 0; i <= 4; i++) {
@@ -634,7 +664,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 				 }
 
 				 // add comments for gender
-				 var gender_text_x = 80;
+				 var gender_text_x = 90;
 				 var gender_text_top_y = 60;
 				 var gender_text_bot_y = 110;
 				 d3.select("#male_svg").append("text")
