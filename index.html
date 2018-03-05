@@ -72,8 +72,8 @@
 			 white-space: normal;
 		 }
 		 .inplot_text{
-			 fill:#E76E70;
-			 color:#E76E70;
+			 fill:#FF80AB;
+			 color:#FF80AB;
 		 }
 		 .factor_sub {
     	display: inline-block;
@@ -93,10 +93,12 @@
 		<h2 style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
 	</p>
 	<p id="subtitle"><h2>Overivew</h2></p>
-	<svg class = "sessionT" width = "900", height = "50">
-		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
-		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
-			Average #Days Mentally Not Good (monthly)</text>
+	<svg class = "sessionT" width = "900", height = "60">
+		<rect class = "inplot_text" x="0", y = "3" width="20" height="20"/>
+		<text x="40" y="22" style = "font-weight:100;font-size:22pt">
+			Average Days Not Happy</text>
+		<text x="40" y="55" style = "font-size:12pt">
+			This graph shows the mental health condition of US Resident per state, as the average number of days not happy within 30 days, for the year 2016.</text>
 	</svg>
 	<div id="usMap" >
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
@@ -120,12 +122,10 @@
 			Habit</text>
 	</svg>
 	<div id="factor">
-    <div class="explain" id="factor_explain">
+     <div id="icons_div"> </div>
+     <div class="explain" id="factor_explain">
      The data is categorized into five bins. Gender does not play important role. For habit,
-   </div>
-
-     <div id="icons_div">
-    </div>
+  	 </div>
 
  </div>
 
@@ -260,18 +260,18 @@ d3.csv("MH16_1.csv", function(data) {
 
      //add example:Wisconsin
 		 svg.append("line")
-			 	.attr("x1", 280)
+			 	.attr("x1", 330)
 			 	.attr("y1", 100)
 			 	.attr("x2", 260)
-			 	.attr("y2", 80)
+			 	.attr("y2", 60)
 			 	.attr("stroke", "#ccc")
 			 	.attr("stroke-width", 2);
 
 		 svg.append("line")
 				.attr("x1", 260.5)
-				.attr("y1", 80.5)
+				.attr("y1", 60.5)
 				.attr("x2", 140)
-				.attr("y2", 80.5)
+				.attr("y2", 60.5)
 				.attr("stroke", "#ccc")
 				.attr("stroke-width", 2);
 
@@ -279,33 +279,34 @@ d3.csv("MH16_1.csv", function(data) {
 		    .attr("id","worstState")
 		    .text("Worst:  ")
 	 			.attr("x", 160)
-	 			.attr("y", 75)
+	 			.attr("y", 55)
 	 			.attr("stroke-width", 1);
 
      d3.select("#worstState").append("tspan")
 		 	 .text("14")
-			 .attr("class","inplot_text")
+		 	 .attr("fill", "#243B83")
+			 // .attr("class","inplot_text")
 			 .attr("font-size", 40);
 
 		 svg.append("text")
  				 .text("days")
  				 .attr("x", 235)
- 				 .attr("y", 75)
+ 				 .attr("y", 55)
  				 .attr("stroke-width", 1);
 
     //add example:New York
 		 svg.append("line")
-				.attr("x1", 430)
+				.attr("x1", 480)
 				.attr("y1", 150)
-				.attr("x2", 430)
+				.attr("x2", 450)
 				.attr("y2", 80)
 				.attr("stroke", "#ccc")
 				.attr("stroke-width", 1.5);
 
 		 svg.append("line")
-				.attr("x1", 380)
+				.attr("x1", 370)
 				.attr("y1", 80.5)
-			  .attr("x2", 480)
+			  .attr("x2", 450)
 				.attr("y2", 80.5)
 			  .attr("stroke", "#ccc")
 				.attr("stroke-width", 1.5);
@@ -319,7 +320,8 @@ d3.csv("MH16_1.csv", function(data) {
 
 			d3.select("#bestState").append("tspan")
 			 	 .text("8")
-				 .attr("class","inplot_text")
+			 	 .attr("fill", "#243B83")
+				 // .attr("class","inplot_text")
 			 	 .attr("font-size", 40);
 
 			svg.append("text")
@@ -329,12 +331,12 @@ d3.csv("MH16_1.csv", function(data) {
 				 .attr("stroke-width", 1);
 });
 
-	svgText1.append("text")
-					.attr("class","explin")
-					.text("HELLO")
-					.attr("x",100)
-					.attr("y",100)
-					.attr("stroke-width", 1);
+	// svgText1.append("text")
+	// 				.attr("class","explin")
+	// 				.text("HELLO")
+	// 				.attr("x",100)
+	// 				.attr("y",100)
+	// 				.attr("stroke-width", 1);
 </script>
 
 <!-- Heatmap: SleepTime and Mental Health -->
@@ -548,7 +550,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 					var colorScale = d3.scaleLinear()
 						 .domain([0,4])
-						 .range(['#164480','#A0D1FA']);
+						 .range([d3.rgb(0,80,175), d3.rgb(155,200, 223)]);
 
 					// bind a <g> tag for each layer
 					var sub_layers = sub_svg.selectAll('g.sub_layers')
