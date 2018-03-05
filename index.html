@@ -13,15 +13,16 @@
   /* Legend Font Style */
      body {
 			 font-family: "Open Sans Condensed";
-			 /* text-align: center; */
+			 margin: 40px 100px 50px 50px;
+			 /* background-color:#E9EBED; */
+			 /* text-align: center; #DCD3C9;#FDE0E1*/
 		 }
      h1 {
 			 font-family: "Open Sans Condensed";
 			 text-transform: uppercase;
 			 font-weight: 200;
 			 font-size: 36pt;
-			 padding: 0;
-			 margin: 0;
+			 position:inherit;
 		 }
      .axis path, .axis line {
 			 fill: none;
@@ -36,10 +37,11 @@
 		 }
 		 text {
 			 font-family: "Open Sans Condensed";
-			 text-transform: uppercase;
+			 /* text-transform: uppercase; */
 		 }
 		 div {
-			 margin: 30px;
+			 border: 2px solid #ccc;
+			 align-items: center;
 		 }
      h3{
 			 text-align:center;
@@ -64,13 +66,16 @@
 </head>
 
 <body>
-	<p id="title"><h1>Title Here</h1></p>
+	<p id="title"><h1>2016 - A DIVE INTO MENTAL HEALTH</h1></p>
 	<p id="subtitle"><h2>SubsTitle Here</h2></p>
-	<div id="usMap">
+	<div id="usMap" style="text-align:center;">
 	<h1>Average Number of Days Not Happy by State</h1>
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
 	</div>
-	<div id="heatMap">
+	<div id="colorLegend">
+		<h1>ColorLegend</h1>
+	</div>
+	<div id="heatMap" style="text-align:center">
 		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
 	</div>
 
@@ -121,6 +126,11 @@ d3.select("#grid").text().split("\n").forEach(function(line, i) {
 });
 
 // Define linear scale for output
+color1 = d3.scaleLinear()
+     .interpolate(d3.interpolateHcl)
+     .range([d3.rgb("#f2f6f7"), d3.rgb("#110080")])
+		 .domain([8, 15]);
+
 color = d3.scaleLinear()
      .interpolate(d3.interpolateHcl)
      .range([d3.rgb("#f2f6f7"), d3.rgb("#110080")])
@@ -128,7 +138,7 @@ color = d3.scaleLinear()
 
 var gridWidth = d3.max(states, function(d) { return d.x; }) + 1,
 		gridHeight = d3.max(states, function(d) { return d.y; }) + 1,
-	  cellSize = 40;
+	  cellSize = 50;
 
 var mData;
 
@@ -172,7 +182,7 @@ d3.csv("MH16_1.csv", function(data) {
 		 	   .attr("y", -cellSize / 2)
 		 	   .attr("width", cellSize - 1)
 		 	   .attr("height", cellSize - 1)
-				 .style("fill", function(d) { return color(d.mhn)});
+				 .style("fill", function(d) { return color1(d.mhn)});
 
 		 state.append("text")
 		 		 .attr("dy", ".25em")
@@ -183,14 +193,14 @@ d3.csv("MH16_1.csv", function(data) {
 		 // Color legend.
 		 var colorLegend = d3.legendColor()
 		         .labelFormat(d3.format(".0f"))
-		         .scale(color)
+		         .scale(color1)
 		         .shapePadding(5)
-		         .shapeWidth(50)
+		         .shapeWidth(20)
 		         .shapeHeight(20)
 		         .labelOffset(12);
 
 		 svg.append("g")
-		    .attr("transform", function(d, i) { return "translate(850," + (i * 20 + 300)+ ")"; })
+		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 329)+ ")"; })
 		    .call(colorLegend);
 });
 </script>
@@ -269,6 +279,19 @@ var sleepLabels = svg2.selectAll("sleepLabel")
     .style("font-size", "12")
     .attr("transform", "translate(" + gridSize / 2 + ", 15)");
 
+
+		var colorGridSize = 18.5;
+		var colorGrid = [];
+
+		for(var i = 7; i < 26; i++){
+			svg2.append("rect")
+					.attr("x", 560)
+					.attr("y", (i-6)*(colorGridSize+1)-10)
+					.attr("width", colorGridSize)
+					.attr("height", colorGridSize)
+					.style("fill", color(i));
+		}
+
 // [paseline(d)] create object for every row of d
 function parseline(d) {
     	return {
@@ -316,16 +339,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
           .style("font-size", "20")
           .attr("transform","rotate(90,"+ (width2) + "," + ageValues.length/2 * gridSize +" )");
 
-      var gradient = svg2.append("defs")
-          .append("linearGradient")
-          .attr("id", "gradient")
-          .attr("x1", "0%")
-          .attr("y1", "0%")
-          .attr("x2", "0%")
-          .attr("y2", "100%")
-          .attr("spreadMethod", "pad");
-
-
       gradient.append("stop")
           .attr("offset", "0%")
           .attr("stop-color", '#0142aa')
@@ -347,15 +360,15 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 </script>
 
-<h1>Gender and Mental Health</h1>
 <div id="gender">
+	<h1>Gender and Mental Health</h1>
 	<div class="gender-text text">
 		explain text
 	</div>
 </div>
 
-<h1>Habit and Mental Health</h1>
 <div id="habit">
+	<h1>Habit and Mental Health</h1>
 	<div class="habit-text text">
 		explain text
 	</div>
