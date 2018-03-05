@@ -72,10 +72,8 @@
 	<h1>Average Number of Days Not Happy by State</h1>
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
 	</div>
-	<div id="colorLegend">
-		<h1>ColorLegend</h1>
-	</div>
-	<div id="heatMap" style="text-align:center">
+
+	<div id="heatMap" style="text-align:center;">
 		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
 	</div>
 
@@ -202,12 +200,58 @@ d3.csv("MH16_1.csv", function(data) {
 		 svg.append("g")
 		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 329)+ ")"; })
 		    .call(colorLegend);
+
+     //add example:Wisconsin
+		 svg.append("line")
+			 	.attr("x1", 280)
+			 	.attr("y1", 100)
+			 	.attr("x2", 260)
+			 	.attr("y2", 80)
+			 	.attr("stroke", "#ccc")
+			 	.attr("stroke-width", 2);
+
+		 svg.append("line")
+				.attr("x1", 260.5)
+				.attr("y1", 80.5)
+				.attr("x2", 140)
+				.attr("y2", 80.5)
+				.attr("stroke", "#ccc")
+				.attr("stroke-width", 2);
+
+		 svg.append("text")
+		    .text("Wisconsin: 14 days")
+	 			.attr("x", 160)
+	 			.attr("y", 75)
+	 			.attr("stroke-width", 1);
+
+    //add example:New York
+		 svg.append("line")
+				.attr("x1", 430)
+				.attr("y1", 150)
+				.attr("x2", 430)
+				.attr("y2", 80)
+				.attr("stroke", "#ccc")
+				.attr("stroke-width", 1.5);
+
+		 svg.append("line")
+				.attr("x1", 380)
+				.attr("y1", 80.5)
+			  .attr("x2", 480)
+				.attr("y2", 80.5)
+			  .attr("stroke", "#ccc")
+				.attr("stroke-width", 1.5);
+
+		 svg.append("text")
+					 .text("New York State: 8 days")
+					 .attr("x", 380)
+					 .attr("y", 75)
+					 .attr("stroke-width", 1);
 });
 </script>
 
 <!-- Heatmap: SleepTime and Mental Health -->
 <script>
-var width2 = 960;
+var width2 = 760;
 var height2 = 500;
 
 var margin = { top: 20, right: 100, bottom: 100, left: 100 },
@@ -279,19 +323,6 @@ var sleepLabels = svg2.selectAll("sleepLabel")
     .style("font-size", "12")
     .attr("transform", "translate(" + gridSize / 2 + ", 15)");
 
-
-		var colorGridSize = 18.5;
-		var colorGrid = [];
-
-		for(var i = 7; i < 26; i++){
-			svg2.append("rect")
-					.attr("x", 560)
-					.attr("y", (i-6)*(colorGridSize+1)-10)
-					.attr("width", colorGridSize)
-					.attr("height", colorGridSize)
-					.style("fill", color(i));
-		}
-
 // [paseline(d)] create object for every row of d
 function parseline(d) {
     	return {
@@ -320,41 +351,24 @@ d3.csv("MH.csv", parseline, function(error, data) {
     	var slpt_mthlthScale = d3.scaleLinear().domain(color.domain())
               .range([ageValues.length * gridSize + 0, 0]);
 
-      var slpt_mthlthAxis = d3.axisRight()
-              .scale(slpt_mthlthScale);
+			var colorGridSize = 18;
+			var colorGrid = [];
 
-      svg2.append("g")
-          .attr("class", "axis")
-          .attr("font-size", "14")
-          .attr("transform", "translate(" + (width2 -55) + ", 0)")
-          .call(slpt_mthlthAxis);
+			for(var i = 6; i < 26; i++){
+				svg2.append("rect")
+						.attr("x", 540)
+						.attr("y", (i-6)*(colorGridSize+1)-2)
+						.attr("width", colorGridSize)
+						.attr("height", colorGridSize)
+						.style("fill", color(i+0.5));
 
-      var crashLabel = svg2.append("text")
-          .attr("class", "label")
-          .text("Number of days not happy")
-          .attr("x", width2)
-          .attr("y", ageValues.length/2 * gridSize)
-          .style("text-anchor", "middle")
-          .style("dominant-baseline", "middle")
-          .style("font-size", "20")
-          .attr("transform","rotate(90,"+ (width2) + "," + ageValues.length/2 * gridSize +" )");
-
-      gradient.append("stop")
-          .attr("offset", "0%")
-          .attr("stop-color", '#0142aa')
-          .attr("stop-opacity", 1);
-
-      gradient.append("stop")
-          .attr("offset", "100%")
-          .attr("stop-color", "#f2f6f7")
-          .attr("stop-opacity", 1);
-
-      svg2.append("rect")
-          .attr("x", width2 - 100)
-          .attr("y", 0)
-          .attr("width", gridSize)
-          .attr("height", ageValues.length * gridSize)
-          .style("fill", "url(#gradient)");
+				if(i%3 == 0) {
+					svg2.append("text")
+							.attr("x", 560)
+							.attr("y", (i-6)*(colorGridSize+1)+13)
+							.text(i);
+				}
+			}
     });
 
 
