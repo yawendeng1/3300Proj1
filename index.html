@@ -123,13 +123,11 @@
 		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
 		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
 			Gender</text>
-		<!-- <rect class = "inplot_text" x="420", y = "15" width="20" height="20"/>
-		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
-			Habit</text> -->
+
 	</svg>
 	<div id="factor">
      <div id="icons_div"> </div>
-     <svg width="200" height="40">
+     <svg width="200" height="50">
      <rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
 		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
 			Smoking/Drinking</text>
@@ -545,12 +543,12 @@ d3.csv("MH.csv", parseline, function(error, data) {
 			var subPath = sub_svg.append("clipPath")
 					.attr("id", paths_ids[k]);
 
-			
+
 				var singlePath = d3.select("#"+paths_ids[k]).append("path")
 						.attr("d",paths[k])
 						.attr("transform","translate(20, 0)");
 
-			
+
 			// 	var singlePath = d3.select("#"+paths_ids[k]).append("path")
 			// 			.attr("d",paths[k]);
 
@@ -948,6 +946,36 @@ d3.select("#smk_svg").append("line")
 .attr("x1", gender_text_x + 3).attr("y1", 136)
 .attr("x2", gender_text_x - 3).attr("y2", 136)
 .attr("stroke", "black").attr("stroke-width", 1);
+
+
+var gender_text_svg = d3.select("#icons_div").append("svg").
+attr("width", "300").
+attr("height", "205").
+attr("id", "gender_text_svg");
+
+gender_text_svg.append("text")
+						 			 			 .text("The percentage is represented by the ").attr("x", 10).attr("y", 25);
+gender_text_svg.append("text")
+.text("height")
+.attr("font-size","25")
+.attr("class","inplot_text").attr("x", 205).attr("y", 25);
+// gender_text_svg.append("text")
+// 						 			 			 .text("of bars.").attr("x", 250).attr("y", 25);
+
+gender_text_svg.append("text")
+			 .text("of bars. For two gender groups, the percentage")
+			 .attr("x", 10).attr("y", 50);
+gender_text_svg.append("text")
+			 			 .text(" of each category of days not happy is almost").attr("x", 10).attr("y", 75);
+
+gender_text_svg.append("text")
+						 .text("the same.").attr("class","inplot_text").attr("x", 10).attr("y", 100).attr("font-size","25");
+
+
+
+
+
+
 
 		</script>
 
