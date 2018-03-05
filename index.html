@@ -13,14 +13,13 @@
   /* Legend Font Style */
      body {
 			 font-family: "Open Sans Condensed";
-			 margin: 40px 100px 50px 50px;
+			 margin: 60px 50px 30px 80px;
 			 /* background-color:#E9EBED; */
 			 /* text-align: center; #DCD3C9;#FDE0E1*/
 		 }
      h1 {
-			 font-family: "Open Sans Condensed";
 			 text-transform: uppercase;
-			 font-weight: 200;
+			 font-weight: 100;
 			 font-size: 36pt;
 			 position:inherit;
 		 }
@@ -41,7 +40,7 @@
 		 }
 		 div {
 			 border: 2px solid #ccc;
-			 align-items: center;
+			 /* align-items: center; */
 		 }
      h3{
 			 text-align:center;
@@ -52,7 +51,7 @@
 			 margin:auto;
 			 margin-bottom:30px;
 			 font-size:13px;
-			 text-align: center;
+			 /* text-align: center; */
 		 }
 		 div.fixed {
 			 position: fixed;
@@ -62,27 +61,34 @@
 			 border: 3px solid #ccc;
 		 }
 		 #icons_div{
-			 white-space : nowrap; /* this does the trick */
+			 white-space : nowrap;
 			 overflow : hidden;
 		 }
 		 .icon_container{
 			 display: inline-block;
 			 white-space: normal;
 		 }
+		 .inplot_text{
+			 fill:#E76E70;
+			 color:#E76E70;
+		 }
    </style>
 
 </head>
 
 <body>
-	<p id="title"><h1>2016 - A DIVE INTO MENTAL HEALTH</h1></p>
+	<p id="title"><h1>2016-A DIVE INTO MENTAL HEALTH</h1></p>
 	<p id="subtitle"><h2>SubsTitle Here</h2></p>
+	<svg width = "900", height = "50">
+		<rect class = "inplot_text" x="10", y = "15" width="20" height="20"/>
+		<text x="50" y="35" style = "font-weight:100;font-size:24pt">
+			Average Number of Days Not Happy by State</text>
+	</svg>
 	<div id="usMap" style="text-align:center;">
-	<h1>Average Number of Days Not Happy by State</h1>
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
 	</div>
-
+  <h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
 	<div id="heatMap" style="text-align:center;">
-		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
 	</div>
 
 <!-- State Grid Map -->
@@ -235,8 +241,8 @@ d3.csv("MH16_1.csv", function(data) {
 
      d3.select("#worstState").append("tspan")
 		 	 .text("14")
-			 .attr("font-size", 40)
-			 .style("fill",color1(14));
+			 .attr("class","inplot_text")
+			 .attr("font-size", 40);
 
 		 svg.append("text")
  				 .text("days")
@@ -270,8 +276,8 @@ d3.csv("MH16_1.csv", function(data) {
 
 			d3.select("#bestState").append("tspan")
 			 	 .text("8")
-			 	 .attr("font-size", 40)
-				 .style("fill",color1(14));
+				 .attr("class","inplot_text")
+			 	 .attr("font-size", 40);
 
 			svg.append("text")
 				 .text("days")
