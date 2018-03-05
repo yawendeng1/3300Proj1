@@ -18,10 +18,11 @@
 			 /* text-align: center; #DCD3C9;#FDE0E1*/
 		 }
      h1 {
+			 font-style: normal;
 			 text-transform: uppercase;
-			 font-weight: 100;
+			 font-weight: 300;
 			 font-size: 36pt;
-			 position:inherit;
+			 position:relative;
 		 }
      .axis path, .axis line {
 			 fill: none;
@@ -40,11 +41,13 @@
 		 }
 		 div {
 			 border: 2px solid #ccc;
-			 /* align-items: center; */
+			 /* text-align:center; */
 		 }
-     h3{
-			 text-align:center;
-			 margin-top:20px;
+     h2{
+			 /* text-align:center;
+			 margin-top:20px; */
+			 font-weight:100;
+			 font-size:24pt;
 		 }
      .text{
 			 width:650px;
@@ -60,7 +63,7 @@
 			 width: 100px;
 			 border: 3px solid #ccc;
 		 }
-		 #icons_div{
+		 #icons_div, #usMap,#heatMap {
 			 white-space : nowrap;
 			 overflow : hidden;
 		 }
@@ -72,28 +75,70 @@
 			 fill:#E76E70;
 			 color:#E76E70;
 		 }
+		 .factor_sub {
+    	display: inline-block;
+    	width:45%;
+   	}
+   	.factor_sub_sub{
+    	display: inline-block;
+    	width:45%;
+   	}
+		.titleVariant { font-weight: 600; color: #555; }
    </style>
 
 </head>
 
 <body>
-	<p id="title"><h1>2016-A DIVE INTO MENTAL HEALTH</h1></p>
-	<p id="subtitle"><h2>SubsTitle Here</h2></p>
-	<svg width = "900", height = "50">
-		<rect class = "inplot_text" x="10", y = "15" width="20" height="20"/>
-		<text x="50" y="35" style = "font-weight:100;font-size:24pt">
-			Average Number of Days Not Happy by State</text>
+	<p id="title"><h1>2016-DIVE INTO MENTAL HEALTH</h1>
+		<h2 style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
+	</p>
+	<p id="subtitle"><h2>Overivew</h2></p>
+	<svg class = "sessionT" width = "900", height = "50">
+		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
+		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
+			Average #Days Mentally Not Good</text>
 	</svg>
-	<div id="usMap" style="text-align:center;">
+	<div id="usMap" >
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
 	</div>
+
+	<p id="subtitle"><h2>Factors Behind Mental Health</h2></p>
 	<svg width = "900", height = "50">
-		<rect class = "inplot_text" x="10", y = "15" width="20" height="20"/>
-		<text x="50" y="35" style = "font-weight:100;font-size:24pt">
-			Average Number of Days Not Happy: Sleep vs. Age</text>
+		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
+		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
+			Sleep vs. Age</text>
 	</svg>
-	<div id="heatMap" style="text-align:center;">
+	<div id="heatMap">
 	</div>
+
+	<svg width = "900", height = "50">
+		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
+		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
+			Gender</text>
+		<rect class = "inplot_text" x="420", y = "15" width="20" height="20"/>
+		<text x="460" y="33" style = "font-weight:100;font-size:18pt">
+			Habit</text>
+	</svg>
+	<div id="factor">
+	   </div>
+	   <div class="explain" id="factor_explain">
+	    The data is categorized into five bins. Gender does not play important role. For habit,
+	   <div>
+	   <div class="factor_sub" id="factor_gender">
+	    <div class="factor_sub_sub" id="factor_gender_male">
+	     Male
+	    </div>
+	    <div class="factor_sub_sub" id="factor_gender_female">
+	     Female
+	    </div>
+	   </div>
+	   <div class="factor_sub" id="factor_habit">
+	    Habit
+	   </div>
+	   </div>
+	   <div id="icons_div">
+	  </div>
+	  </div>
 
 <!-- State Grid Map -->
 <!-- textscript of the grid_map -->
@@ -120,7 +165,7 @@ http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
  */
 
 //Width and height of grid_map
-var width1 = 660;
+var width1 = 760;
 var height1 = 500;
 
 //Create SVG element and append grid_map to the SVG
@@ -128,6 +173,11 @@ var svg = d3.select("#usMap")
 			.append("svg")
 			.attr("width", width1)
 			.attr("height", height1);
+
+var svgText1 = d3.select("#usMap")
+						.append("svg")
+						.attr("width", 200)
+						.attr("height", height1);
 
 //states is an array of textscript of the grid_map
 var states = [];
@@ -187,7 +237,7 @@ d3.csv("MH16_1.csv", function(data) {
 
     var state = svg.append("g")
 		    .attr("class","mapGrid")
-		 	  .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")")
+		 	  .attr("transform", "translate(" + width1/2+ "," + height1/2 + ")")
 		 	  .selectAll(".state")
 		 	  .data(states)
 		 	  .enter().append("g")
@@ -216,7 +266,7 @@ d3.csv("MH16_1.csv", function(data) {
 		         .labelOffset(12);
 
 		 svg.append("g")
-		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 329)+ ")"; })
+		    .attr("transform", function(d, i) { return "translate(640," + (i * 20 + 329)+ ")"; })
 		    .call(colorLegend);
 
      //add example:Wisconsin
@@ -289,6 +339,13 @@ d3.csv("MH16_1.csv", function(data) {
 				 .attr("y", 75)
 				 .attr("stroke-width", 1);
 });
+
+	svgText1.append("text")
+					.attr("class","explin")
+					.text("HELLO")
+					.attr("x",100)
+					.attr("y",100)
+					.attr("stroke-width", 1);
 </script>
 
 <!-- Heatmap: SleepTime and Mental Health -->
@@ -398,7 +455,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 			for(var i = 6; i < 26; i++){
 				svg2.append("rect")
-						.attr("x", 540)
+						.attr("x", 545)
 						.attr("y", (i-6)*(colorGridSize+1)-2)
 						.attr("width", colorGridSize)
 						.attr("height", colorGridSize)
@@ -406,7 +463,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 				if(i%3 == 0) {
 					svg2.append("text")
-							.attr("x", 560)
+							.attr("x", 575)
 							.attr("y", (i-6)*(colorGridSize+1)+13)
 							.text(i);
 				}
@@ -415,19 +472,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 
 		</script>
-		<svg width = "900", height = "50">
-			<rect class = "inplot_text" x="10", y = "15" width="20" height="20"/>
-			<text x="50" y="35" style = "font-weight:100;font-size:24pt">
-				Habit</text>
-		</svg>
-
-		<div id="habit">
-			<div class="habit-text text">
-				explain text
-			</div>
-			<div id="icons_div">
-		</div>
-		</div>
 
 		<!-- Smoke, Alcohol consumption(Habit) & Mental Health -->
 		<!-- Reference - https://square.github.io/intro-to-d3/examples/ -->
