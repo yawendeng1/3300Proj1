@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Mosaic</title>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.5/d3-legend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js">
+  </script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <style type="text/css">
+  /* Legend Font Style */
+     body {
+			 font-family: "Open Sans Condensed";
+			 margin: 40px 100px 50px 50px;
+			 /* background-color:#E9EBED; */
+			 /* text-align: center; #DCD3C9;#FDE0E1*/
+		 }
+     h1 {
+			 font-family: "Open Sans Condensed";
+			 text-transform: uppercase;
+			 font-weight: 200;
+			 font-size: 36pt;
+			 position:inherit;
+		 }
+     .axis path, .axis line {
+			 fill: none;
+			 stroke: #000;
+			 shape-rendering: crispEdges;
+		 }
+     .label{
+			 font-family: "Open Sans Condensed";
+		 }
+
+		 #icons_div{
+			 white-space : nowrap; /* this does the trick */
+       overflow : hidden;
+		 }
+		 .icon_container{
+				/* width: 150px; */
+				/* white-space: nowrap;
+				display : inline-block;
+				overflow: hidden; */
+				display: inline-block;
+		    /* text-align: center;
+		    vertical-align: middle;
+		    margin: 0 3%; */
+		    white-space: normal;
+		 }
+		 svg {
+			 border: solid #ccc 1px;
+		 }
+		 text {
+			 font-family: "Open Sans Condensed";
+			 /* text-transform: uppercase; */
+		 }
+		 div {
+			 border: 2px solid #ccc;
+			 align-items: center;
+		 }
+     h3{
+			 text-align:center;
+			 margin-top:20px;
+		 }
+     .text{
+			 width:650px;
+			 margin:auto;
+			 margin-bottom:30px;
+			 font-size:13px;
+			 text-align: center;
+		 }
+		 div.fixed {
+			 position: fixed;
+			 bottom: 0;
+			 right: 0;
+			 width: 100px;
+			 border: 3px solid #ccc;
+		 }
+   </style>
+
+</head>
+
+<body>
+	<p id="title"><h1>2016 - A DIVE INTO MENTAL HEALTH</h1></p>
+	<p id="subtitle"><h2>SubsTitle Here</h2></p>
+	<div id="usMap" style="text-align:center;">
+	<h1>Average Number of Days Not Happy by State</h1>
+	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
+	</div>
+	<div id="colorLegend">
+		<h1>ColorLegend</h1>
+	</div>
+	<div id="heatMap" style="text-align:center">
+		<h1>Average Number of Days Not Happy: Sleep vs. Age</h1>
+	</div>
+
+<!-- State Grid Map -->
+<!-- textscript of the grid_map -->
+<script id="grid" type="text/plain">
+                              ME
+               WI          VT NH
+WA ID MT ND MN IL MI    NY MA
+OR NV WY SD IA IN OH PA NJ CT RI
+CA UT CO NE MO KY WV VA MD DE
+   AZ NM KS AR TN NC SC
+         OK LA MS AL GA
+HI AK    TX             FL
+</script>
+
+<script type="text/javascript">
+
+/*  This visualization was made possible by modifying code provided by:
+
+Scott Murray, Choropleth example from "Interactive Data Visualization for the Web"
+https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html
+
+Malcolm Maclean, tooltips example tutorial
+http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
+ */
+
+//Width and height of grid_map
+var width1 = 660;
+var height1 = 500;
+
+//Create SVG element and append grid_map to the SVG
+var svg = d3.select("#usMap")
+			.append("svg")
+			.attr("width", width1)
+			.attr("height", height1);
+
+//states is an array of textscript of the grid_map
+var states = [];
+
+d3.select("#grid").text().split("\n").forEach(function(line, i) {
+  var re = /\w+/g, m;
+  while (m = re.exec(line)) states.push({
+    name: m[0],
+    x: m.index / 3,
+    y: i
+  });
+});
+
+// Define linear scale for output
+color1 = d3.scaleLinear()
+     .interpolate(d3.interpolateHcl)
+     .range([d3.rgb("#f2f6f7"), d3.rgb("#110080")])
+		 .domain([8, 15]);
+
+color = d3.scaleLinear()
+     .interpolate(d3.interpolateHcl)
+     .range([d3.rgb("#f2f6f7"), d3.rgb("#110080")])
+		 .domain([6.5, 25]);
+
+var gridWidth = d3.max(states, function(d) { return d.x; }) + 1,
+		gridHeight = d3.max(states, function(d) { return d.y; }) + 1,
+	  cellSize = 50;
+
+var mData;
+
+// Load data for every state!
+d3.csv("MH16_1.csv", function(data) {
+     mData = data;
+
+		 // Loop through each state data value in the .csv file
+		 for (var i = 0; i < mData.length; i++) {
+
+		 	// Grab State Name
+		 	var dataState = mData[i].ss;
+
+		 	// Grab number of days for mental health variable
+		 	var dataValue = mData[i].mhn;
+
+		 	// Find the corresponding state inside the data
+		 	for (var j = 0; j < states.length; j++)  {
+		 		var StateId = states[j].name;
+
+		 		if (dataState == StateId) {
+
+		 		// Copy the data value into the states array
+		 		states[j].mhn = dataValue;
+		 		// Stop looking through the states array
+		 		break;
+		 		}
+		 	}
+		}
+
+    var state = svg.append("g")
+		    .attr("class","mapGrid")
+		 	  .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")")
+		 	  .selectAll(".state")
+		 	  .data(states)
+		 	  .enter().append("g")
+		 	  .attr("transform", function(d) { return "translate(" + (d.x - gridWidth/ 2) * cellSize + "," + (d.y - gridHeight / 2) * cellSize + ")"; });
+
+		 state.append("rect")
+		 	   .attr("x", -cellSize / 2)
+		 	   .attr("y", -cellSize / 2)
+		 	   .attr("width", cellSize - 1)
+		 	   .attr("height", cellSize - 1)
+				 .style("fill", function(d) { return color1(d.mhn)});
+
+		 state.append("text")
+		 		 .attr("dy", ".25em")
+				 .style("text-anchor","middle")
+		 		 .text(function(d) { return d.name; })
+		 		 .style("fill", "white");
+
+		 // Color legend.
+		 var colorLegend = d3.legendColor()
+		         .labelFormat(d3.format(".0f"))
+		         .scale(color1)
+		         .shapePadding(5)
+		         .shapeWidth(20)
+		         .shapeHeight(20)
+		         .labelOffset(12);
+
+		 svg.append("g")
+		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 329)+ ")"; })
+		    .call(colorLegend);
+});
+</script>
+
+<!-- Heatmap: SleepTime and Mental Health -->
+<script>
+var width2 = 960;
+var height2 = 500;
+
+var margin = { top: 20, right: 100, bottom: 100, left: 100 },
+    width2 = width2 - margin.left - margin.right,
+    height2 = height2 - margin.top - margin.bottom,
+    gridSize = Math.floor(Math.min(height2/13, width2 / 16)),
+    colors = ["#f2f0f7","#54278f"];
+
+//arrays storing the value of 13 age groups and 16 sleep groups
+var ageValues = Array(13);
+var sleepValues = Array(16)
+
+for(var i=0; i<ageValues.length; i++) {
+	ageValues[i] = 18 + i*5;
+}
+
+for (var i=0; i<sleepValues.length; i++) {
+	sleepValues[i] = i;
+}
+
+var svg2 = d3.select("#heatMap").append("svg")
+			.attr("width", width2 + margin.left + margin.right)
+              .attr("height", height2 + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//create y axis labels
+var ageLabels = svg2.selectAll("ageLabel")
+					.data(ageValues)
+					.enter().append("text")
+					.attr("class", "label")
+					.text(function(d) {return d; })
+					.attr("x", 0)
+					.attr("y", function(d, i) {return (ageValues.length - i)*gridSize; })
+					.style("text-anchor", "middle")
+				  .style("dominant-baseline", "middle")
+				  .style("font-size", "12")
+				  .attr("transform", "translate(-20," + (gridSize / 2 * -1) + ")");
+
+var yLabel = svg2.append("text")
+                 .attr("class", "label")
+                 .text("Age")
+                 .attr("x", -50)
+                 .attr("y", ageValues.length/2 * gridSize)
+                 .style("text-anchor", "middle")
+                 .style("dominant-baseline", "middle")
+                 .style("font-size", "20")
+                 .attr("transform", "rotate(-90, -50," + ageValues.length/2 * gridSize +" )");
+
+//create x axis labels
+var xLabel = svg2.append("text")
+  .attr("class", "label")
+  .text("Sleep")
+  .attr("x", sleepValues.length/2 * gridSize)
+  .attr("y", ageValues.length * gridSize)
+  .style("text-anchor", "middle")
+  .style("dominant-baseline", "middle")
+  .style("font-size", "20")
+  .attr("transform", "translate(0,40)");
+
+var sleepLabels = svg2.selectAll("sleepLabel")
+  .data(sleepValues)
+  .enter().append("text")
+    .attr("class", "label")
+    .text(function(d) { return d+1; })
+    .attr("x", function(d, i) { return i * gridSize; })
+    .attr("y", gridSize*13)
+    .style("text-anchor", "middle")
+    .style("font-size", "12")
+    .attr("transform", "translate(" + gridSize / 2 + ", 15)");
+
+
+		var colorGridSize = 18.5;
+		var colorGrid = [];
+
+		for(var i = 7; i < 26; i++){
+			svg2.append("rect")
+					.attr("x", 560)
+					.attr("y", (i-6)*(colorGridSize+1)-10)
+					.attr("width", colorGridSize)
+					.attr("height", colorGridSize)
+					.style("fill", color(i));
+		}
+
+// [paseline(d)] create object for every row of d
+function parseline(d) {
+    	return {
+    		age: d.age,
+    		sleep: d.sleep,
+    		mh: d.mh
+    	};
+  }
+
+//callback function
+d3.csv("MH.csv", parseline, function(error, data) {
+    	var heatmap =svg2.selectAll("slpt_mthlth")
+    	.data(data)
+    	.enter().append("rect")
+    	.attr("x", function(d) { return ((d.sleep-1)*gridSize); })
+    	.attr("y", function(d) { return (ageValues.length - d.age)*gridSize; })
+    	.attr("rx", 3)
+    	.attr("ry", 3)
+    	.attr("width", gridSize)
+    	.attr("height", gridSize)
+    	.attr("stroke", "#E6E6E6")
+    	.style("fill", function(d) { return color(d.mh); })
+
+    	heatmap.append("title").text(function(d) { return d.mh; });
+
+    	var slpt_mthlthScale = d3.scaleLinear().domain(color.domain())
+              .range([ageValues.length * gridSize + 0, 0]);
+
+      var slpt_mthlthAxis = d3.axisRight()
+              .scale(slpt_mthlthScale);
+
+      svg2.append("g")
+          .attr("class", "axis")
+          .attr("font-size", "14")
+          .attr("transform", "translate(" + (width2 -55) + ", 0)")
+          .call(slpt_mthlthAxis);
+
+      var crashLabel = svg2.append("text")
+          .attr("class", "label")
+          .text("Number of days not happy")
+          .attr("x", width2)
+          .attr("y", ageValues.length/2 * gridSize)
+          .style("text-anchor", "middle")
+          .style("dominant-baseline", "middle")
+          .style("font-size", "20")
+          .attr("transform","rotate(90,"+ (width2) + "," + ageValues.length/2 * gridSize +" )");
+
+      // gradient.append("stop")
+      //     .attr("offset", "0%")
+      //     .attr("stop-color", '#0142aa')
+      //     .attr("stop-opacity", 1);
+      //
+      // gradient.append("stop")
+      //     .attr("offset", "100%")
+      //     .attr("stop-color", "#f2f6f7")
+      //     .attr("stop-opacity", 1);
+
+      svg2.append("rect")
+          .attr("x", width2 - 100)
+          .attr("y", 0)
+          .attr("width", gridSize)
+          .attr("height", ageValues.length * gridSize)
+          .style("fill", "url(#gradient)");
+    });
+
+
+	</script>
+
+	<!-- <h1>Gender and Mental Health</h1>
+	<div id="gender">
+		<div class="gender-text text">
+			explain text
+		</div>
+	</div> -->
+
+	<h1>Habit and Mental Health</h1>
+
+	<div id="habit">
+		<div class="habit-text text">
+			explain text
+		</div>
+		<div id="icons_div">
+	</div>
+	</div>
+
+	<!-- Smoke, Alcohol consumption(Habit) & Mental Health -->
+	<!-- Reference - https://square.github.io/intro-to-d3/examples/ -->
+	<script>
+
+
+// first two are gender data, later 4 are Smoke, Alcohol consumption(Habit)
+	var factor_data = [
+		{  1: 0.525, 2: 0.137, 3: 0.091, 4: 0.048, 5: 0.199},
+		{  1: 0.516, 2: 0.144, 3: 0.094, 4: 0.052, 5: 0.194},
+	{  1: 0.564, 2: 0.141, 3: 0.087, 4: 0.045, 5: 0.163},
+	{  1: 0.555, 2: 0.143, 3: 0.084, 4: 0.054, 5: 0.164},
+	{  1: 0.367, 2: 0.141, 3: 0.116, 4: 0.066, 5: 0.311},
+	{  1: 0.351, 2: 0.153, 3: 0.123, 4: 0.067, 5: 0.307},
+	];
+
+
+	var paths_ids = ["male","female","milk", "drink", "cigar","both"];
+	var svg_ids = ["male_svg","female_svg","healthy_svg", "drk_svg", "smk_svg", "smkdrk_svg"];
+	var paths = ["M26.81 21.449C21.544 26.714 17.224 31.123 17.224 31.213 17.224 31.319 21.598 35.764 26.953 41.119L36.681 50.848 46.32 41.209C51.621 35.907 55.959 31.498 55.959 31.391 55.959 31.213 36.681 11.845 36.502 11.845 36.449 11.845 32.094 16.164 26.81 21.449Z M19.009 94.312V136.795L24.418 136.76 29.809 136.706 29.862 123.783C29.898 113.698 29.952 110.806 30.13 110.699 30.416 110.52 43.303 110.52 43.589 110.699 43.767 110.806 43.821 113.698 43.857 123.783L43.91 136.706 48.926 136.76 53.942 136.795 54.031 94.455C54.085 71.161 54.103 52.044 54.049 51.954 54.013 51.883 46.106 51.829 36.485 51.829H19.009V94.312Z",
+	"M34.098 20.055C28.814 25.339 24.476 29.766 24.476 29.856 24.476 29.962 28.85 34.407 34.205 39.762L43.933 49.491 53.679 39.745 63.425 29.998 53.893 20.466C48.663 15.219 44.219 10.827 44.04 10.684 43.754 10.453 42.916 11.237 34.098 20.055Z M36.704 51.401C36.65 51.526 36.597 57.22 36.561 64.038L36.525 76.444 35.401 79.568C34.776 81.281 33.973 83.62 33.58 84.744 33.187 85.869 32.384 88.207 31.795 89.921 31.206 91.634 30.403 93.973 30.01 95.097 29.617 96.222 28.814 98.56 28.225 100.274 27.636 101.988 26.833 104.326 26.44 105.45 26.047 106.575 25.244 108.913 24.655 110.627 24.066 112.341 23.263 114.679 22.87 115.803 22.477 116.928 21.674 119.266 21.085 120.98 20.496 122.694 19.693 125.032 19.3 126.156 18.907 127.281 18.104 129.619 17.515 131.333 16.176 135.153 16.087 135.438 16.087 135.831 16.087 136.135 17.515 136.152 45.218 136.117 73.243 136.063 74.367 136.045 74.421 135.742 74.456 135.563 74.314 134.974 74.117 134.439 73.903 133.903 73.582 133.011 73.368 132.44 73.153 131.886 72.921 131.262 72.85 131.065 72.707 130.726 72.475 130.066 71.6 127.674 70.726 125.282 70.494 124.621 70.351 124.282 70.208 123.943 69.976 123.283 69.101 120.891 68.905 120.355 68.584 119.463 68.387 118.927 67.513 116.535 67.281 115.875 67.138 115.536 66.995 115.197 66.763 114.536 65.888 112.144 65.014 109.752 64.782 109.092 64.639 108.753 64.496 108.414 64.264 107.753 63.389 105.361 62.533 102.987 62.283 102.309 62.14 101.97 62.069 101.773 61.908 101.327 61.783 100.988 61.658 100.649 61.497 100.203 61.426 100.006 61.283 99.667 61.033 98.989 60.176 96.615 59.302 94.222 59.07 93.562 58.927 93.223 58.784 92.883 58.552 92.224 57.677 89.832 56.803 87.439 56.571 86.779 56.428 86.44 56.285 86.1 56.053 85.441 55.178 83.049 54.982 82.513 54.661 81.621 54.464 81.085 53.34 77.979 53.286 77.836 52.876 76.837 52.733 76.48 52.679 72.713 52.679 63.985 52.679 54.595 52.626 51.561 52.465 51.401 52.144 51.079 36.811 51.097 36.704 51.401Z",
+	"M28.325 16.822V21.392L22.949 29.514 17.573 37.654 17.611 87.786 17.669 137.936 33.682 137.994 49.694 138.032 49.618 127.338 49.541 116.624 50.712 116.566 51.883 116.509 51.998 123.574C52.075 127.453 52.133 132.31 52.133 134.326V138.032H69.797V37.443L64.997 30.205 60.197 22.947V12.272H28.325V16.822Z M59.813 23.005C59.813 23.734 59.909 24.214 60.082 24.349 60.312 24.541 59.64 25.654 56.05 31.069L51.749 37.558V67.568H49.253V39.536H19.685V37.04L34.334 37.002 48.965 36.944 53.093 30.704 57.24 24.464 43.109 24.368 28.997 24.272 28.939 23.062 28.882 21.872H59.813V23.005Z M52.133 106.717C52.133 108.483 52.075 110.346 52.018 110.845L51.883 111.728H49.637V103.472H52.133V106.717Z", "M44.181 16.208V19.568H24.405V29.936H15.957V49.136H23.08L22.965 66.934C22.907 76.746 22.83 96.637 22.773 111.171L22.658 137.61 39.035 137.725C48.04 137.802 59.79 137.878 65.128 137.898L74.843 137.936 74.958 133.923C75.035 131.715 75.093 127.798 75.093 125.226V120.56H86.363L86.478 111.478C86.555 106.506 86.613 92.509 86.613 80.374V58.352H75.285V49.136H84.693V25.136H80.085V12.848H44.181V16.208Z M70.485 50.288V51.44H44.181V49.136H70.485V50.288Z M80.795 72.118C80.718 75.69 80.661 86.403 80.661 95.926V113.264H75.093V99.958C75.093 92.662 75.15 81.949 75.227 76.15L75.342 65.648H80.91L80.795 72.118Z M35.925 87.152V105.2H33.429V69.104H35.925V87.152Z M50.325 76.746C50.325 80.95 50.267 89.072 50.19 94.794L50.075 105.2H47.579L47.694 97.962C47.771 93.987 47.829 85.866 47.829 79.914V69.104H50.325V76.746Z M64.859 74.71C64.782 77.802 64.725 85.923 64.725 92.758V105.2H62.229V95.926C62.229 90.838 62.286 82.717 62.363 77.878L62.478 69.104H64.974L64.859 74.71Z",
+	"M20.421 20.432V28.016L28.254 28.054 36.069 28.112 36.126 30.55 36.184 33.008H48.261V38H19.845L19.883 42.454 19.941 46.928 34.398 46.986 48.837 47.024V38H55.173V30.896H48.261V20.528L42.462 20.49 36.645 20.432 36.587 16.63 36.549 12.848H20.421V20.432Z M19.883 93.814 19.941 137.936 34.398 137.994 48.837 138.032V49.712H19.845L19.883 93.814Z","M37.189 18.856V26.44L45.022 26.478 52.837 26.536 52.894 28.974 52.952 31.432H65.029V36.04H61.63L61.515 40.494C61.438 42.952 61.381 45.64 61.381 46.446V47.944H65.797V36.424H67.717V47.944H71.922L71.979 42.126C72.018 38.939 72.018 34.754 71.979 32.814L71.941 29.32H65.029V18.76H53.509V11.272H37.189V18.856Z M19.333 41.992V47.944H59.653V36.04H19.333V41.992Z M19.064 73.422C19.006 86.19 18.91 105.602 18.853 116.603L18.757 136.59 29.278 136.706C35.058 136.782 46.827 136.84 55.429 136.859H71.077L71.134 128.872 71.173 120.904H82.443L82.558 116.43C82.635 113.992 82.693 100.955 82.712 87.496L82.731 63.016 77.048 62.958 71.365 62.92V50.498L56.926 50.382C48.997 50.306 37.246 50.248 30.853 50.248H19.179L19.064 73.422Z M76.875 80.334C76.798 86.133 76.741 96.059 76.741 102.414V113.992H71.173V106.158C71.173 101.858 71.23 91.931 71.307 84.078L71.422 69.832H76.99L76.875 80.334Z M32.005 89.704V106.504H29.509V90.587C29.509 81.851 29.566 74.286 29.624 73.787L29.758 72.904H32.005V89.704Z M46.405 84.482C46.405 90.856 46.347 98.421 46.27 101.282L46.155 106.504H43.659L43.774 104.334C43.851 103.163 43.909 95.598 43.909 87.534V72.904H46.405V84.482Z M60.901 73.096C60.958 73.192 60.958 80.757 60.882 89.896L60.747 106.504H58.251L58.366 93.966C58.443 87.093 58.501 79.528 58.501 77.166V72.904H59.634C60.267 72.904 60.843 72.981 60.901 73.096Z"
+	];
+
+
+
+
+
+
+
+	for (var k = 0; k <= 5; k++) {
+		var sub_data = [factor_data[k]];
+		var divContainer = d3.select("#icons_div").append("div")
+		.attr("class","icon_container")
+		.attr("id", "icon" + k);
+
+		var sub_svg = divContainer.append("svg")
+			.attr("id",svg_ids[k])
+			.attr("width","150")
+			.attr("height","150");
+
+		// var sub_svg = d3.select("#habit").append("svg")
+		// 	.attr("id",svg_ids[k])
+		// 	.attr("width","150")
+		// 	.attr("height","150");
+
+			var subPath = sub_svg.append("clipPath")
+				.attr("id", paths_ids[k]);
+
+				var singlePath = d3.select("#"+paths_ids[k]).append("path")
+				.attr("d",paths[k]);
+
+			var stack = d3.stack().keys(["5", "4", "3", "2", "1"]);
+
+			var stacked = stack(sub_data);
+
+			// plotting stack
+			var height = 250;
+			var width = sub_svg.attr("width");
+
+				var maxY = d3.max(stacked, function(d) {
+				    return d3.max(d, function(d) {
+				       return d[1];
+				    });
+				});
+
+				// var x = d3.scaleLinear()
+				// 	.range([0, 100])
+				// 	.domain([0,1]);
+
+				//y scale
+				var yStart = 12;
+				var y = d3.scaleLinear()
+				   .domain([0, maxY])
+				   .range([yStart+125.76, yStart]);
+
+				var colorScale = d3.scaleLinear()
+				   .domain([0,4])
+				   .range(['#164480','#A0D1FA']);
+
+				// bind a <g> tag for each layer
+				var sub_layers = sub_svg.selectAll('g.sub_layers')
+				   .data(stacked, function(d) { return d.key; })
+				   .enter()
+				   .append('g')
+				   .attr('class', 'sub_layers')
+				   .attr('fill', function(d, i) { return colorScale(i); })
+
+				var right_padding = 0;
+
+				// bind a <rect> to each value inside the layer
+				var sub_bars = sub_layers.selectAll('sub_layers')
+				    .data(function(d) { return d; })
+				   .enter()
+				   .append('rect')
+				   .attr('x', 10)
+				   .attr('width', width)
+				   .attr('y', (function(d) {
+				      return y(d[1]);}))
+				   .attr('height', function(d) {
+				      return y(d[0]) - y(d[1]);
+						})
+						//.attr("clip-path", "url(#milk)");
+				   .attr("clip-path",
+					 "url(#" + paths_ids[k] + ")"
+				 );
+			 }
+
+
+
+	// construct path for habit
+
+
+	//path for smoking
+
+
+	// stacked bars
+	// data and data processing
+
+	// healthy
+	//drink, no smoke
+	//smoke, no drink
+
+	//drink and smoke
+
+
+
+
+	var textScale = d3.scaleLinear()
+	.domain([0,4])
+	.range(["1-6","7-12", "13-18", "19-24", "25-30"]);
+
+	var colorList = [];
+	for (var i = 0; i <= 4; i++) {
+	   colorList.push(colorScale(i));
+	}
+
+	var legendScale = d3.scaleOrdinal()
+	   .domain(["1-6","7-12", "13-18", "19-24", "25-30"])
+	   .range(colorList.reverse());
+
+	// //add lengend
+	// var genderLegend = d3.legendColor()
+	// 			.labelFormat(d3.format(".0f"))
+	// 			.scale(legendScale)
+	// 			.shapePadding(5)
+	// 			.shapeWidth(20)
+	// 			.shapeHeight(20)
+	// 			.labelOffset(12);
+	//
+	// 			healthy_svg.append("g")
+	// 			.attr("transform", function(d, i) { return "translate(500," + (i * 20 + 20)+ ")"; })
+	// 			.call(genderLegend);
+
+
+	</script>
+
+
+</body>
+</html>
