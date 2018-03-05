@@ -240,7 +240,7 @@ d3.csv("MH16_1.csv", function(data) {
 
 		 svg.append("text")
  				 .text("days")
- 				 .attr("x", 220)
+ 				 .attr("x", 235)
  				 .attr("y", 75)
  				 .attr("stroke-width", 1);
 
@@ -521,6 +521,63 @@ d3.csv("MH.csv", parseline, function(error, data) {
 					 .attr("clip-path",
 					 "url(#" + paths_ids[k] + ")"
 				 );
+
+				 // insert legend
+     if (k == 1){
+      var divContainer = d3.select("#icons_div").append("div")
+      .attr("class","icon_container")
+      .attr("id", "icon_legend");
+
+     var icon_lg_svg = divContainer.append("svg")
+      .attr("id","icon_lg_svg")
+      .attr("width","70")
+      .attr("height","150");
+
+     var texts = ["1-6","7-12", "13-18", "19-24", "25-30"];
+
+     var colorList = [];
+      for (var i = 0; i <= 4; i++) {
+        colorList.push(colorScale(i));
+      }
+
+     var legendScale = d3.scaleOrdinal()
+        .domain(["1-6","7-12", "13-18", "19-24", "25-30"])
+        .range(colorList.reverse());
+        //add lengend
+      // var genderLegend = d3.legendColor()
+     //   // .attr("id", "icons_legend_group")
+      //   .labelFormat(d3.format(".0f"))
+      //   .scale(legendScale)
+      //   .shapePadding(5)
+      //   .shapeWidth(20)
+      //   .shapeHeight(20)
+      //   .labelOffset(12);
+
+       var colorGridSize = 22;
+       var colorGrid = [];
+
+       for(var i = 0; i < 5; i++){
+        icon_lg_svg.append("rect")
+          .attr("x", 10)
+          .attr("y", (i)*(colorGridSize+3) + 12)
+          .attr("width", colorGridSize)
+          .attr("height", colorGridSize)
+          .style("fill", colorList[i]);
+
+        icon_lg_svg.append("text")
+             .attr("x", 35)
+             .attr("y", (i)*(colorGridSize+3)+25)
+             .text(texts[i]);
+
+       }
+
+      // icon_lg_svg.append("g")
+      //   .attr("transform", function(d, i) { return "translate(500," + (i * 20 + 20)+ ")"; })
+      //   .call(genderLegend);
+
+
+
+     			}
 			 }
 
 
