@@ -93,7 +93,7 @@
 <body>
 	<p id="title"><h1>DIVE INTO MENTAL HEALTH 2016</h1>
 		<h2 style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
-		<h3>Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016</h3>
+		<h3 style="color:#999">Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016</h3>
 	</p>
 	<p id="subtitle"><h2>Overivew</h2></p>
 	<svg class = "sessionT" width = "900", height = "60">
@@ -109,7 +109,7 @@
 
 	<p id="subtitle"><h2>Factors Behind Mental Health</h2></p>
 	<svg width = "900", height = "60">
-		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
+		<rect class = "inplot_text" x="0", y = "5" width="20" height="20"/>
 		<text x="40" y="22" style = "font-weight:100;font-size:18pt">
 			Sleep vs. Age</text>
 		<text x="40" y="55" style = "font-size:14pt">
@@ -135,8 +135,8 @@
 			Smoking/Drinking</text>
 	</svg>
      <div id="icons_div2"> </div>
-     <div class="explain" id="factor_explain">
-     The data is categorized into five bins. Gender does not play important role. For habit,
+     <div class="explain" id="factor_explain" style="text-align:center">
+     <p style="font-size:12px">sourse: <a href="https://www.cdc.gov/brfss/annual_data/annual_2016.html">2016 BRFSS Survey Data </a> </p>
   	 </div>
 
  </div>
@@ -343,18 +343,59 @@ d3.csv("MH16_1.csv", function(data) {
 				 .attr("stroke-width", 1);
 });
 
+	svgText1.append("text")
+					.attr("class","explin")
+					.text("U.S. Average:")
+					.attr("x",0)
+					.attr("y",100)
+					.attr("stroke-width", 1);
+
+	svgText1.append("text")
+				 .text("11")
+				 .attr("x", 70)
+				 .attr("y", 100)
+				 .attr("fill", "#243B83")
+			 	 .attr("font-size", 40);
+
+	svgText1.append("text")
+				 .text("days")
+				 .attr("x", 110)
+				 .attr("y", 100)
+				 .attr("stroke-width", 1);
+
+
 	// svgText1.append("text")
 	// 				.attr("class","explin")
-	// 				.text("HELLO")
-	// 				.attr("x",100)
-	// 				.attr("y",100)
+	// 				.text("U.S. Average:")
+	// 				.attr("x",0)
+	// 				.attr("y",200)
 	// 				.attr("stroke-width", 1);
+
+	svgText1.append("text")
+				 .text("32.6%")
+				 .attr("x", 0)
+				 .attr("y", 170)
+				 .attr("fill", "#243B83")
+			 	 .attr("font-size", 40);
+
+	svgText1.append("text")
+				 .text("have more than")
+				 .attr("x", 90)
+				 .attr("y", 170)
+				 .attr("stroke-width", 1);
+
+	svgText1.append("text")
+				 .text("15 unhappy days")
+				 .attr("x", 0)
+				 .attr("y", 200)
+				 .attr("stroke-width", 1);
+
 </script>
 
 <!-- Heatmap: SleepTime and Mental Health -->
 <script>
 var width2 = 760;
-var height2 = 600;
+var height2 = 550;
 
 var margin = { top: 20, right: 100, bottom: 100, left: 100 },
     width2 = width2 - margin.left - margin.right,
