@@ -96,7 +96,7 @@
 	<svg class = "sessionT" width = "900", height = "50">
 		<rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
 		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
-			Average #Days Mentally Not Good</text>
+			Average #Days Mentally Not Good (monthly)</text>
 	</svg>
 	<div id="usMap" >
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
@@ -120,25 +120,14 @@
 			Habit</text>
 	</svg>
 	<div id="factor">
-	   </div>
-	   <div class="explain" id="factor_explain">
-	    The data is categorized into five bins. Gender does not play important role. For habit,
-	   <div>
-	   <div class="factor_sub" id="factor_gender">
-	    <div class="factor_sub_sub" id="factor_gender_male">
-	     Male
-	    </div>
-	    <div class="factor_sub_sub" id="factor_gender_female">
-	     Female
-	    </div>
-	   </div>
-	   <div class="factor_sub" id="factor_habit">
-	    Habit
-	   </div>
-	   </div>
-	   <div id="icons_div">
-	  </div>
-	  </div>
+    <div class="explain" id="factor_explain">
+     The data is categorized into five bins. Gender does not play important role. For habit,
+   </div>
+
+     <div id="icons_div">
+    </div>
+
+ </div>
 
 <!-- State Grid Map -->
 <!-- textscript of the grid_map -->
@@ -465,7 +454,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 					svg2.append("text")
 							.attr("x", 575)
 							.attr("y", (i-6)*(colorGridSize+1)+13)
-							.text(i);
+							.text(i + " days");
 				}
 			}
     });
@@ -500,9 +489,10 @@ d3.csv("MH.csv", parseline, function(error, data) {
 		];
 
 
-		var widths = [120, 140, 140, 160, 120, 100];
-		var icon_lg_svg_width = 140;
-
+		var widths = [160, 110, 170, 140, 170, 120];
+		var icon_lg_svg_width = 110;
+		var labels = ["male", "female", "not smoker/drink", "drinker only","smoker only", "smoker and drinker"];
+		 var label_offset = [5, 12, 0, 25, 5, 0];
 
 
 		for (var k = 0; k <= 5; k++) {
@@ -511,21 +501,34 @@ d3.csv("MH.csv", parseline, function(error, data) {
 			.attr("class","icon_container")
 			.attr("id", "icon" + k);
 
+
 			var sub_svg = divContainer.append("svg")
 				.attr("id",svg_ids[k])
+				.attr("class","icons_center")
 				.attr("width",widths[k])
-				.attr("height","150");
+				.attr("height","200");
 
 
-				var subPath = sub_svg.append("clipPath")
+			var subPath = sub_svg.append("clipPath")
 					.attr("id", paths_ids[k]);
 
-					var singlePath = d3.select("#"+paths_ids[k]).append("path")
-					.attr("d",paths[k]);
+			if (k>=2){
+				var singlePath = d3.select("#"+paths_ids[k]).append("path")
+						.attr("d",paths[k])
+						.attr("transform","translate(20, 0)");
 
-				var stack = d3.stack().keys(["5", "4", "3", "2", "1"]);
+			}
+			else{
+				var singlePath = d3.select("#"+paths_ids[k]).append("path")
+						.attr("d",paths[k]);
 
-				var stacked = stack(sub_data);
+			}
+
+
+
+			var stack = d3.stack().keys(["5", "4", "3", "2", "1"]);
+
+			var stacked = stack(sub_data);
 
 				// plotting stack
 				var height = 250;
@@ -536,10 +539,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
 								 return d[1];
 							});
 					});
-
-					// var x = d3.scaleLinear()
-					// 	.range([0, 100])
-					// 	.domain([0,1]);
 
 					//y scale
 					var yStart = 12;
@@ -578,50 +577,345 @@ d3.csv("MH.csv", parseline, function(error, data) {
 						 "url(#" + paths_ids[k] + ")"
 					 );
 
+
+
+					// insert labels
+					sub_svg.append("text")
+							 .attr("id","bestState")
+							 .text(labels[k])
+							 .attr("x", label_offset[k])
+							 .attr("y", 170)
+							 .attr("stroke-width", 1);
+
+
 			 // insert legend between two parts
-	     if (k == 1){
-	      var divContainer = d3.select("#icons_div").append("div")
-	      .attr("class","icon_container")
-	      .attr("id", "icon_legend");
+			 if (k == 1){
+				var divContainer = d3.select("#icons_div").append("div")
+				.attr("class","icon_container")
+				.attr("id", "icon_legend");
 
-		     var icon_lg_svg = divContainer.append("svg")
-		      .attr("id","icon_lg_svg")
-		      .attr("width",icon_lg_svg_width)
-		      .attr("height","150");
+				 var icon_lg_svg = divContainer.append("svg")
+					.attr("id","icon_lg_svg")
+					.attr("width",icon_lg_svg_width)
+					.attr("height","200");
 
-		     var texts = ["1-6","7-12", "13-18", "19-24", "25-30"];
+				 var texts = ["1-6 ","7-12 ", "13-18 days", "19-24 ", "25-30 "];
 
-		     var colorList = [];
-		      for (var i = 0; i <= 4; i++) {
-		        colorList.push(colorScale(i));
-		      }
+				 var colorList = [];
+					for (var i = 0; i <= 4; i++) {
+						colorList.push(colorScale(i));
+					}
 
-		     var legendScale = d3.scaleOrdinal()
-		        .domain(["1-6","7-12", "13-18", "19-24", "25-30"])
-		        .range(colorList.reverse());
+				 var legendScale = d3.scaleOrdinal()
+						.domain(["1-6","7-12", "13-18", "19-24", "25-30"])
+						.range(colorList.reverse());
 
-		       var colorGridSize = 22;
-		       var colorGrid = [];
+					 var colorGridSize = 22;
+					 var colorGrid = [];
 
-		       for(var i = 0; i < 5; i++){
-		        icon_lg_svg.append("rect")
-		          .attr("x", 10)
-		          .attr("y", (i)*(colorGridSize+3) + 12)
-		          .attr("width", colorGridSize)
-		          .attr("height", colorGridSize)
-		          .style("fill", colorList[i]);
+					 for(var i = 0; i < 5; i++){
+						icon_lg_svg.append("rect")
+							.attr("x", 10)
+							.attr("y", (i)*(colorGridSize+3) + 12)
+							.attr("width", colorGridSize)
+							.attr("height", colorGridSize)
+							.style("fill", colorList[i]);
 
-		        icon_lg_svg.append("text")
-		             .attr("x", 35)
-		             .attr("y", (i)*(colorGridSize+3)+25)
-		             .text(texts[i]);
+						icon_lg_svg.append("text")
+								 .attr("x", 35)
+								 .attr("y", (i)*(colorGridSize+3)+25)
+								 .text(texts[i]);
 
-		       }
+					 }
 
-	     			}
+						}
 				 }
 
+				 // add comments for gender
+				 var gender_text_x = 80;
+				 var gender_text_top_y = 60;
+				 var gender_text_bot_y = 110;
+				 d3.select("#male_svg").append("text")
+						.attr("id","gender_text_1")
+						.text("~52%")
+						.attr("class","inplot_text")
+						.attr("font-size", 30)
+						.attr("x", gender_text_x)
+						.attr("y", gender_text_top_y - 25)
+						.attr("stroke-width", 1);
 
+				d3.select("#male_svg").append("text")
+					 .text("< 7 days")
+					 .attr("x", gender_text_x+5)
+					 .attr("y", gender_text_top_y);
+
+				d3.select("#male_svg").append("text")
+							.attr("id","gender_text_2")
+							.text("~20%")
+							.attr("class","inplot_text")
+							.attr("font-size", 30)
+							.attr("x", gender_text_x)
+							.attr("y", gender_text_bot_y)
+							.attr("stroke-width", 1);
+
+			d3.select("#male_svg").append("text")
+						 .text("> 24 days")
+						 .attr("x", gender_text_x+5)
+						 .attr("y", gender_text_bot_y + 25);
+
+			var hor_line_y = 125*0.52+12;
+
+			// d3.select("#male_svg").append("line")
+			// .attr("x1", gender_text_x + 40).attr("y1", hor_line_y)
+			// .attr("x2", gender_text_x + 60).attr("y2", hor_line_y)
+			// .attr("stroke", "black").attr("stroke-width", 1);
+
+			d3.select("#male_svg").append("line")
+			.attr("x1", gender_text_x + 60).attr("y1", hor_line_y)
+			.attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
+			.attr("stroke", "black").attr("stroke-width", 1);
+
+			d3.select("#male_svg").append("line")
+			.attr("x1", gender_text_x + 60 + 3).attr("y1", hor_line_y)
+			.attr("x2", gender_text_x + 60 - 3).attr("y2", hor_line_y)
+			.attr("stroke", "black").attr("stroke-width", 1);
+
+			d3.select("#male_svg").append("line")
+			.attr("x1", gender_text_x + 60 + 3).attr("y1", gender_text_top_y - 50)
+			.attr("x2", gender_text_x + 60 - 3).attr("y2", gender_text_top_y - 50)
+			.attr("stroke", "black").attr("stroke-width", 1);
+
+			// d3.select("#male_svg").append("line")
+			// .attr("x1", gender_text_x + 60 + 3).attr("y1", gender_text_top_y - 50 + 4)
+			// .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
+			// .attr("stroke", "black").attr("stroke-width", 1);
+			//
+			// d3.select("#male_svg").append("line")
+			// .attr("x1", gender_text_x + 60 - 3).attr("y1", gender_text_top_y - 50 + 4)
+			// .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
+			// .attr("stroke", "black").attr("stroke-width", 1);
+
+
+			var hor_line_y = 125*0.8+12;
+			// d3.select("#male_svg").append("line")
+			// .attr("x1", gender_text_x + 20 ).attr("y1", hor_line_y)
+			// .attr("x2", gender_text_x ).attr("y2", hor_line_y)
+			// .attr("stroke", "black").attr("stroke-width", 1);
+			//var gender_text_x = gender_text_x - 5;
+			d3.select("#male_svg").append("line")
+			.attr("x1", gender_text_x ).attr("y1", hor_line_y)
+			.attr("x2", gender_text_x).attr("y2", 136)
+			.attr("stroke", "black").attr("stroke-width", 1);
+
+			d3.select("#male_svg").append("line")
+			.attr("x1", gender_text_x + 3).attr("y1", hor_line_y)
+			.attr("x2", gender_text_x - 3).attr("y2", hor_line_y)
+			.attr("stroke", "black").attr("stroke-width", 1);
+
+			d3.select("#male_svg").append("line")
+			.attr("x1", gender_text_x + 3).attr("y1", 136)
+			.attr("x2", gender_text_x - 3).attr("y2", 136)
+			.attr("stroke", "black").attr("stroke-width", 1);
+
+			// d3.select("#male_svg").append("line")
+			// .attr("x1", gender_text_x + 3).attr("y1", 136 - 4)
+			// .attr("x2", gender_text_x).attr("y2", 136)
+			// .attr("stroke", "black").attr("stroke-width", 1);
+			//
+			// d3.select("#male_svg").append("line")
+			// .attr("x1", gender_text_x - 3).attr("y1", 136 - 4)
+			// .attr("x2", gender_text_x ).attr("y2", 136)
+			// .attr("stroke", "black").attr("stroke-width", 1);
+
+			// add comments for drinker
+			var gender_text_x = 100;
+			// var gender_text_top_y = 60;
+			// var gender_text_bot_y = 110;
+
+
+			d3.select("#healthy_svg").append("text")
+				 .attr("id","drinker_text_1")
+				 .text("~56%")
+				 .attr("class","inplot_text")
+				 .attr("font-size", 30)
+				 .attr("x", gender_text_x)
+				 .attr("y", gender_text_top_y - 25)
+				 .attr("stroke-width", 1);
+
+		 d3.select("#healthy_svg").append("text")
+				.text("< 7 days")
+				.attr("x", gender_text_x+5)
+				.attr("y", gender_text_top_y);
+
+		 d3.select("#healthy_svg").append("text")
+					 .attr("id","drinker_text_2")
+					 .text("~16%")
+					 .attr("class","inplot_text")
+					 .attr("font-size", 30)
+					 .attr("x", gender_text_x)
+					 .attr("y", gender_text_bot_y)
+					 .attr("stroke-width", 1);
+
+	 d3.select("#healthy_svg").append("text")
+					.text("> 24 days")
+					.attr("x", gender_text_x+5)
+					.attr("y", gender_text_bot_y + 25);
+
+	 var hor_line_y = 125*0.56+12;
+
+	 // d3.select("#male_svg").append("line")
+	 // .attr("x1", gender_text_x + 40).attr("y1", hor_line_y)
+	 // .attr("x2", gender_text_x + 60).attr("y2", hor_line_y)
+	 // .attr("stroke", "black").attr("stroke-width", 1);
+
+	 d3.select("#healthy_svg").append("line")
+	 .attr("x1", gender_text_x + 60).attr("y1", hor_line_y)
+	 .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
+	 .attr("stroke", "black").attr("stroke-width", 1);
+
+	 d3.select("#healthy_svg").append("line")
+	 .attr("x1", gender_text_x + 60 + 3).attr("y1", hor_line_y)
+	 .attr("x2", gender_text_x + 60 - 3).attr("y2", hor_line_y)
+	 .attr("stroke", "black").attr("stroke-width", 1);
+
+	 d3.select("#healthy_svg").append("line")
+	 .attr("x1", gender_text_x + 60 + 3).attr("y1", gender_text_top_y - 50)
+	 .attr("x2", gender_text_x + 60 - 3).attr("y2", gender_text_top_y - 50)
+	 .attr("stroke", "black").attr("stroke-width", 1);
+
+
+
+	 // d3.select("#healthy_svg").append("line")
+	 // .attr("x1", gender_text_x + 60 + 3).attr("y1", gender_text_top_y - 50 + 4)
+	 // .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
+	 // .attr("stroke", "black").attr("stroke-width", 1);
+	 //
+	 // d3.select("#healthy_svg").append("line")
+	 // .attr("x1", gender_text_x + 60 - 3).attr("y1", gender_text_top_y - 50 + 4)
+	 // .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
+	 // .attr("stroke", "black").attr("stroke-width", 1);
+
+
+	 var hor_line_y = 125*0.84+12;
+	 // d3.select("#male_svg").append("line")
+	 // .attr("x1", gender_text_x + 20 ).attr("y1", hor_line_y)
+	 // .attr("x2", gender_text_x ).attr("y2", hor_line_y)
+	 // .attr("stroke", "black").attr("stroke-width", 1);
+
+	 d3.select("#healthy_svg").append("line")
+	 .attr("x1", gender_text_x ).attr("y1", hor_line_y)
+	 .attr("x2", gender_text_x).attr("y2", 136)
+	 .attr("stroke", "black").attr("stroke-width", 1);
+
+	 d3.select("#healthy_svg").append("line")
+	 .attr("x1", gender_text_x + 3).attr("y1", hor_line_y)
+	 .attr("x2", gender_text_x - 3).attr("y2", hor_line_y)
+	 .attr("stroke", "black").attr("stroke-width", 1);
+
+	 d3.select("#healthy_svg").append("line")
+	 .attr("x1", gender_text_x + 3).attr("y1", 136)
+	 .attr("x2", gender_text_x - 3).attr("y2", 136)
+	 .attr("stroke", "black").attr("stroke-width", 1);
+
+	 // d3.select("#healthy_svg").append("line")
+	 // .attr("x1", gender_text_x + 3).attr("y1", 136 - 4)
+	 // .attr("x2", gender_text_x).attr("y2", 136)
+	 // .attr("stroke", "black").attr("stroke-width", 1);
+	 //
+	 // d3.select("#healthy_svg").append("line")
+	 // .attr("x1", gender_text_x - 3).attr("y1", 136 - 4)
+	 // .attr("x2", gender_text_x ).attr("y2", 136)
+	 // .attr("stroke", "black").attr("stroke-width", 1);
+
+
+
+
+	 // add comments for smoker+both
+	 var gender_text_x = 85;
+
+
+	 d3.select("#smk_svg").append("text")
+			.attr("id","smoker_text_1")
+			.text("35-36%")
+			.attr("class","inplot_text")
+			.attr("font-size", 30)
+			.attr("x", gender_text_x)
+			.attr("y", gender_text_top_y - 25)
+			.attr("stroke-width", 1);
+
+	d3.select("#smk_svg").append("text")
+		 .text("< 7 days")
+		 .attr("x", gender_text_x+5)
+		 .attr("y", gender_text_top_y);
+
+	d3.select("#smk_svg").append("text")
+				.attr("id","smoker_text_2")
+				.text("30-31%")
+				.attr("class","inplot_text")
+				.attr("font-size", 30)
+				.attr("x", gender_text_x + 5)
+				.attr("y", gender_text_bot_y)
+				.attr("stroke-width", 1);
+
+d3.select("#smk_svg").append("text")
+			 .text("> 24 days")
+			 .attr("x", gender_text_x+10)
+			 .attr("y", gender_text_bot_y + 25);
+
+var hor_line_y = 125*0.36+12;
+
+// d3.select("#male_svg").append("line")
+// .attr("x1", gender_text_x + 40).attr("y1", hor_line_y)
+// .attr("x2", gender_text_x + 60).attr("y2", hor_line_y)
+// .attr("stroke", "black").attr("stroke-width", 1);
+
+d3.select("#smk_svg").append("line")
+.attr("x1", gender_text_x + 80).attr("y1", hor_line_y)
+.attr("x2", gender_text_x + 80).attr("y2", gender_text_top_y - 50)
+.attr("stroke", "black").attr("stroke-width", 1);
+
+d3.select("#smk_svg").append("line")
+.attr("x1", gender_text_x + 80 + 3).attr("y1", hor_line_y)
+.attr("x2", gender_text_x + 80 - 3).attr("y2", hor_line_y)
+.attr("stroke", "black").attr("stroke-width", 1);
+
+d3.select("#smk_svg").append("line")
+.attr("x1", gender_text_x + 80 + 3).attr("y1", gender_text_top_y - 50)
+.attr("x2", gender_text_x + 80 - 3).attr("y2", gender_text_top_y - 50)
+.attr("stroke", "black").attr("stroke-width", 1);
+
+
+// d3.select("#smk_svg").append("line")
+// .attr("x1", gender_text_x + 80 + 3).attr("y1", gender_text_top_y - 50 + 4)
+// .attr("x2", gender_text_x + 80).attr("y2", gender_text_top_y - 50)
+// .attr("stroke", "black").attr("stroke-width", 1);
+//
+// d3.select("#smk_svg").append("line")
+// .attr("x1", gender_text_x + 80 - 3).attr("y1", gender_text_top_y - 50 + 4)
+// .attr("x2", gender_text_x + 80).attr("y2", gender_text_top_y - 50)
+// .attr("stroke", "black").attr("stroke-width", 1);
+
+
+var hor_line_y = 125*0.70+12;
+// d3.select("#male_svg").append("line")
+// .attr("x1", gender_text_x + 20 ).attr("y1", hor_line_y)
+// .attr("x2", gender_text_x ).attr("y2", hor_line_y)
+// .attr("stroke", "black").attr("stroke-width", 1);
+
+d3.select("#smk_svg").append("line")
+.attr("x1", gender_text_x ).attr("y1", hor_line_y)
+.attr("x2", gender_text_x).attr("y2", 136)
+.attr("stroke", "black").attr("stroke-width", 1);
+
+d3.select("#smk_svg").append("line")
+.attr("x1", gender_text_x + 3).attr("y1", hor_line_y)
+.attr("x2", gender_text_x - 3).attr("y2", hor_line_y)
+.attr("stroke", "black").attr("stroke-width", 1);
+
+d3.select("#smk_svg").append("line")
+.attr("x1", gender_text_x + 3).attr("y1", 136)
+.attr("x2", gender_text_x - 3).attr("y2", 136)
+.attr("stroke", "black").attr("stroke-width", 1);
 
 		</script>
 
