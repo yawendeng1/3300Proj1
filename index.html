@@ -139,6 +139,7 @@
 			Current Smoking / Heavy Drinking</text>
 	</svg>
      <div id="icons_div2"> </div>
+		 <svg id="habit_explain" width="600" height="40">
      <div class="explain" id="factor_explain" style="text-align:center">
      <p style="font-size:12px">sourse: <a href="https://www.cdc.gov/brfss/annual_data/annual_2016.html">2016 BRFSS Survey Data </a> </p>
 		 <p style="font-size:12px"> Presented by <a href="https://github.com/yawendeng1/3300Proj1">The Mosaic </a></p>
@@ -763,23 +764,10 @@ d3.csv("MH.csv", parseline, function(error, data) {
 			.attr("x2", gender_text_x + 60 - 3).attr("y2", gender_text_top_y - 50)
 			.attr("stroke", "black").attr("stroke-width", 1);
 
-			// d3.select("#male_svg").append("line")
-			// .attr("x1", gender_text_x + 60 + 3).attr("y1", gender_text_top_y - 50 + 4)
-			// .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
-			// .attr("stroke", "black").attr("stroke-width", 1);
-			//
-			// d3.select("#male_svg").append("line")
-			// .attr("x1", gender_text_x + 60 - 3).attr("y1", gender_text_top_y - 50 + 4)
-			// .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
-			// .attr("stroke", "black").attr("stroke-width", 1);
 
 
 			var hor_line_y = 125*0.8+12;
-			// d3.select("#male_svg").append("line")
-			// .attr("x1", gender_text_x + 20 ).attr("y1", hor_line_y)
-			// .attr("x2", gender_text_x ).attr("y2", hor_line_y)
-			// .attr("stroke", "black").attr("stroke-width", 1);
-			//var gender_text_x = gender_text_x - 5;
+
 			d3.select("#male_svg").append("line")
 			.attr("x1", gender_text_x ).attr("y1", hor_line_y)
 			.attr("x2", gender_text_x).attr("y2", 136)
@@ -795,15 +783,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
 			.attr("x2", gender_text_x - 3).attr("y2", 136)
 			.attr("stroke", "black").attr("stroke-width", 1);
 
-			// d3.select("#male_svg").append("line")
-			// .attr("x1", gender_text_x + 3).attr("y1", 136 - 4)
-			// .attr("x2", gender_text_x).attr("y2", 136)
-			// .attr("stroke", "black").attr("stroke-width", 1);
-			//
-			// d3.select("#male_svg").append("line")
-			// .attr("x1", gender_text_x - 3).attr("y1", 136 - 4)
-			// .attr("x2", gender_text_x ).attr("y2", 136)
-			// .attr("stroke", "black").attr("stroke-width", 1);
 
 			// add comments for drinker
 			var gender_text_x = 100;
@@ -841,10 +820,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 	 var hor_line_y = 125*0.56+12;
 
-	 // d3.select("#male_svg").append("line")
-	 // .attr("x1", gender_text_x + 40).attr("y1", hor_line_y)
-	 // .attr("x2", gender_text_x + 60).attr("y2", hor_line_y)
-	 // .attr("stroke", "black").attr("stroke-width", 1);
 
 	 d3.select("#healthy_svg").append("line")
 	 .attr("x1", gender_text_x + 60).attr("y1", hor_line_y)
@@ -863,22 +838,9 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 
 
-	 // d3.select("#healthy_svg").append("line")
-	 // .attr("x1", gender_text_x + 60 + 3).attr("y1", gender_text_top_y - 50 + 4)
-	 // .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
-	 // .attr("stroke", "black").attr("stroke-width", 1);
-	 //
-	 // d3.select("#healthy_svg").append("line")
-	 // .attr("x1", gender_text_x + 60 - 3).attr("y1", gender_text_top_y - 50 + 4)
-	 // .attr("x2", gender_text_x + 60).attr("y2", gender_text_top_y - 50)
-	 // .attr("stroke", "black").attr("stroke-width", 1);
-
 
 	 var hor_line_y = 125*0.84+12;
-	 // d3.select("#male_svg").append("line")
-	 // .attr("x1", gender_text_x + 20 ).attr("y1", hor_line_y)
-	 // .attr("x2", gender_text_x ).attr("y2", hor_line_y)
-	 // .attr("stroke", "black").attr("stroke-width", 1);
+
 
 	 d3.select("#healthy_svg").append("line")
 	 .attr("x1", gender_text_x ).attr("y1", hor_line_y)
@@ -894,17 +856,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
 	 .attr("x1", gender_text_x + 3).attr("y1", 136)
 	 .attr("x2", gender_text_x - 3).attr("y2", 136)
 	 .attr("stroke", "black").attr("stroke-width", 1);
-
-	 // d3.select("#healthy_svg").append("line")
-	 // .attr("x1", gender_text_x + 3).attr("y1", 136 - 4)
-	 // .attr("x2", gender_text_x).attr("y2", 136)
-	 // .attr("stroke", "black").attr("stroke-width", 1);
-	 //
-	 // d3.select("#healthy_svg").append("line")
-	 // .attr("x1", gender_text_x - 3).attr("y1", 136 - 4)
-	 // .attr("x2", gender_text_x ).attr("y2", 136)
-	 // .attr("stroke", "black").attr("stroke-width", 1);
-
 
 
 
@@ -942,11 +893,6 @@ d3.select("#smk_svg").append("text")
 
 var hor_line_y = 125*0.36+12;
 
-// d3.select("#male_svg").append("line")
-// .attr("x1", gender_text_x + 40).attr("y1", hor_line_y)
-// .attr("x2", gender_text_x + 60).attr("y2", hor_line_y)
-// .attr("stroke", "black").attr("stroke-width", 1);
-
 d3.select("#smk_svg").append("line")
 .attr("x1", gender_text_x + 80).attr("y1", hor_line_y)
 .attr("x2", gender_text_x + 80).attr("y2", gender_text_top_y - 50)
@@ -963,22 +909,8 @@ d3.select("#smk_svg").append("line")
 .attr("stroke", "black").attr("stroke-width", 1);
 
 
-// d3.select("#smk_svg").append("line")
-// .attr("x1", gender_text_x + 80 + 3).attr("y1", gender_text_top_y - 50 + 4)
-// .attr("x2", gender_text_x + 80).attr("y2", gender_text_top_y - 50)
-// .attr("stroke", "black").attr("stroke-width", 1);
-//
-// d3.select("#smk_svg").append("line")
-// .attr("x1", gender_text_x + 80 - 3).attr("y1", gender_text_top_y - 50 + 4)
-// .attr("x2", gender_text_x + 80).attr("y2", gender_text_top_y - 50)
-// .attr("stroke", "black").attr("stroke-width", 1);
-
-
 var hor_line_y = 125*0.70+12;
-// d3.select("#male_svg").append("line")
-// .attr("x1", gender_text_x + 20 ).attr("y1", hor_line_y)
-// .attr("x2", gender_text_x ).attr("y2", hor_line_y)
-// .attr("stroke", "black").attr("stroke-width", 1);
+
 
 d3.select("#smk_svg").append("line")
 .attr("x1", gender_text_x ).attr("y1", hor_line_y)
@@ -1020,7 +952,13 @@ gender_text_svg.append("text")
 						 .text("the same.").attr("class","inplot_text").attr("x", 10).attr("y", 100).attr("font-size","25");
 
 
+d3.select("#habit_explain").append("text")
+			 .text("The usage of alcohol surprisingly does not have a strong correlation to people's mental health.")
+			 .attr("x", 10).attr("y", 15);
 
+d3.select("#habit_explain").append("text")
+			 	.text("However, the usage of tobacco shows a significant negative impact.")
+			 	.attr("x", 10).attr("y", 40);
 
 
 
