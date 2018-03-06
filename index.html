@@ -386,7 +386,7 @@ d3.csv("MH16_1.csv", function(data) {
 var width2 = 760;
 var height2 = 550;
 
-var margin = { top: 20, right: 100, bottom: 100, left: 100 },
+var margin = { top: 20, right: 100, bottom: 100, left: 60 },
     width2 = width2 - margin.left - margin.right,
     height2 = height2 - margin.top - margin.bottom,
     gridSize = Math.floor(Math.min(height2/13, width2 / 16)),
@@ -511,7 +511,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 		         .labelOffset(12);
 
 		 svg2.append("g")
-		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 300)+ ")"; })
+		    .attr("transform", function(d, i) { return "translate(585," + (i * 20 + 300)+ ")"; })
 		    .call(colorLegend);
     });
 
