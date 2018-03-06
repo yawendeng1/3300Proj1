@@ -420,7 +420,7 @@ var ageLabels = svg2.selectAll("ageLabel")
 					.attr("y", function(d, i) {return (ageValues.length - i)*gridSize; })
 					.style("text-anchor", "middle")
 				  .style("dominant-baseline", "middle")
-				  .style("font-size", "12")
+				  .style("font-size", "15")
 				  .attr("transform", "translate(-20," + (gridSize / 2 * -1) + ")");
 
 var yLabel = svg2.append("text")
@@ -452,7 +452,7 @@ var sleepLabels = svg2.selectAll("sleepLabel")
     .attr("x", function(d, i) { return i * gridSize; })
     .attr("y", gridSize*13)
     .style("text-anchor", "middle")
-    .style("font-size", "12")
+    .style("font-size", "15")
     .attr("transform", "translate(" + gridSize / 2 + ", 15)");
 
 // [paseline(d)] create object for every row of d
@@ -717,10 +717,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 			var hor_line_y = 125*0.52+12;
 
-			// d3.select("#male_svg").append("line")
-			// .attr("x1", gender_text_x + 40).attr("y1", hor_line_y)
-			// .attr("x2", gender_text_x + 60).attr("y2", hor_line_y)
-			// .attr("stroke", "black").attr("stroke-width", 1);
+
 
 			d3.select("#male_svg").append("line")
 			.attr("x1", gender_text_x + 60).attr("y1", hor_line_y)
