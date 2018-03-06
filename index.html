@@ -89,15 +89,15 @@
 		<h2 id="title_h2" style="padding-left: 0px;color:#999">A look into <span class="Variant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
 
 		<h3 id="title_h3" style="color:#999">
-			Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016.</h3>
+			Indicated by number of days not feeling mentally good within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016.</h3>
 
 	<h2>Overivew</h2>
 	<svg class = "sessionT" width = "900", height = "60">
 		<rect class = "inplot_text" x="0", y = "3" width="20" height="20"/>
 		<text x="40" y="22" style = "font-weight:100;font-size:18pt">
-			Average Days Not Happy</text>
+			Average Days Not In Good Mental Status</text>
 		<text x="40" y="55" style = "font-size:14pt">
-			This map shows the mental health status of US Resident per state, as the average number of days not happy within 30 days.</text>
+			This map shows the mental health status of US Resident per state, as the average number of days not in good mental status within 30 days.</text>
 	</svg>
 	<div id="usMap" >
 	<!-- reference:http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
@@ -109,7 +109,7 @@
 		<text x="40" y="22" style = "font-weight:100;font-size:18pt">
 			Sleep vs. Age</text>
 		<text x="40" y="55" style = "font-size:14pt">
-			This graph shows the average #days people are not happy (out of 30 days), influenced by <tspan class="Variant" style="font-size:20px">hours of sleep</tspan> (1~16hr/day) and <tspan class="Variant" style="font-size:20px">age</tspan> (18-78 yr).
+			This graph shows the average #days people are not in good mental status (out of 30 days), influenced by <tspan class="Variant" style="font-size:20px">hours of sleep</tspan> (1~16hr/day) and <tspan class="Variant" style="font-size:20px">age</tspan> (18-78 yr).
 		</text>
 	</svg>
 	<div id="heatMap">
@@ -381,7 +381,7 @@ d3.csv("MH16_1.csv", function(data) {
 				 .attr("stroke-width", 1);
 
 	svgText1.append("text")
-				 .text("15 unhappy days")
+				 .text("15 days of mentally bad condition")
 				 .attr("x", 0)
 				 .attr("y", 180)
 				 .attr("stroke-width", 1);
@@ -923,7 +923,7 @@ gender_text_svg.append("text")
 			 .text("of bars. For two gender groups, the percentage")
 			 .attr("x", 10).attr("y", 50);
 gender_text_svg.append("text")
-			 			 .text(" of each category of days not happy is almost").attr("x", 10).attr("y", 75);
+			 			 .text(" of each category of days not mentally good is almost").attr("x", 10).attr("y", 75);
 
 gender_text_svg.append("text")
 						 .text("the same.").attr("class","inplot_text").attr("x", 10).attr("y", 100).attr("font-size","25");
