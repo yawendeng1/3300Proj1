@@ -47,7 +47,7 @@
 			 width: 100px;
 			 /* border: 3px solid #ccc; */
 		 }
-		 #icons_div, #usMap,#heatMap {
+		 #icons_div, #icons_div2, #usMap,#heatMap {
 			 white-space : nowrap;
 			 overflow : hidden;
 		 }
@@ -82,7 +82,7 @@
 		<h2 style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
 
 		<h3 style="color:#999">
-			Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016</h3>
+			Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016.</h3>
 
 	<p id="subtitle"><h2>Overivew</h2></p>
 	<svg class = "sessionT" width = "900", height = "60">
@@ -511,7 +511,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 		         .labelOffset(12);
 
 		 svg2.append("g")
-		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 329)+ ")"; })
+		    .attr("transform", function(d, i) { return "translate(600," + (i * 20 + 300)+ ")"; })
 		    .call(colorLegend);
     });
 
