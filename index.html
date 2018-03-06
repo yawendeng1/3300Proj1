@@ -32,17 +32,16 @@
      .label{
 			 font-family: "Open Sans Condensed";
 		 }
-		 /*svg {
+		 svg {
 		 	/*word-wrap : break-word;*/
-			 /*border: solid #ccc 1px;*/
-		 /*}*/
+			 /* border: solid #ccc 1px; */
+		 /*}
 		 text {
 			 font-family: "Open Sans Condensed";
 			 /* text-transform: uppercase; */
 		 }
 		 div {
-
-			 /*border: 2px solid #ccc;*/
+			 border: 2px solid #ccc;
 			 /* text-align:center; */
 		 }
      h2{
@@ -91,10 +90,17 @@
 </head>
 
 <body>
-	<p id="title"><h1>DIVE INTO MENTAL HEALTH 2016</h1>
+	<p id="title" style = "font-weight: 300;
+	font-size: 36pt">DIVE INTO MENTAL HEALTH -- 2016
+	  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp<text style="font-size: 12px">Presented by <a href="https://github.com/yawendeng1/3300Proj1">The Mosaic </a></text>
+		<img src="Proj_Icon.svg" alt="Project Icon" width="100" align="bottom"></p>
+
 		<h2 style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
-		<h3 style="color:#999">Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016</h3>
-	</p>
+
+		<h3 style="color:#999">
+			Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016</h3>
+
 	<p id="subtitle"><h2>Overivew</h2></p>
 	<svg class = "sessionT" width = "900", height = "60">
 		<rect class = "inplot_text" x="0", y = "3" width="20" height="20"/>
@@ -127,14 +133,15 @@
 	</svg>
 	<div id="factor">
      <div id="icons_div"> </div>
-     <svg width="200" height="50">
+     <svg width="400" height="50">
      <rect class = "inplot_text" x="0", y = "15" width="20" height="20"/>
 		<text x="40" y="33" style = "font-weight:100;font-size:18pt">
-			Smoking/Drinking</text>
+			Current Smoking / Heavy Drinking</text>
 	</svg>
      <div id="icons_div2"> </div>
      <div class="explain" id="factor_explain" style="text-align:center">
      <p style="font-size:12px">sourse: <a href="https://www.cdc.gov/brfss/annual_data/annual_2016.html">2016 BRFSS Survey Data </a> </p>
+		 <p style="font-size:12px"> Presented by <a href="https://github.com/yawendeng1/3300Proj1">The Mosaic </a></p>
   	 </div>
 
  </div>
@@ -556,8 +563,8 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 		var widths = [160, 140, 170, 220, 170, 120];
 		var icon_lg_svg_width = 110;
-		var labels = ["male", "female", "not smoker/drinker", "drinker only","smoker only", "smoker and drinker"];
-		 var label_offset = [27, 32, 0, 25, 5, 0];
+		var labels = ["male", "female", "Neither of the two", "Heavy Drinker Only","Current Smoker Only", "Both"];
+		 var label_offset = [27, 32, 0, 10, 0, 34];
 
 
 		for (var k = 0; k <= 5; k++) {
