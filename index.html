@@ -14,8 +14,6 @@
      body {
 			 font-family: "Open Sans Condensed";
 			 margin: 60px 50px 30px 80px;
-			 /* background-color:#E9EBED; */
-			 /* text-align: center; #DCD3C9;#FDE0E1*/
 		 }
      h1 {
 			 font-style: normal;
@@ -32,21 +30,7 @@
      .label{
 			 font-family: "Open Sans Condensed";
 		 }
-		 svg {
-		 	/*word-wrap : break-word;*/
-			 /* border: solid #ccc 1px; */
-		 /*}
-		 text {
-			 font-family: "Open Sans Condensed";
-			 /* text-transform: uppercase; */
-		 }
-		 div {
-			 border: 2px solid #ccc;
-			 /* text-align:center; */
-		 }
      h2{
-			 /* text-align:center;
-			 margin-top:20px; */
 			 font-weight:100;
 			 font-size:24pt;
 		 }
@@ -55,14 +39,13 @@
 			 margin:auto;
 			 margin-bottom:30px;
 			 font-size:13px;
-			 /* text-align: center; */
 		 }
 		 div.fixed {
 			 position: fixed;
 			 bottom: 0;
 			 right: 0;
 			 width: 100px;
-			 border: 3px solid #ccc;
+			 /* border: 3px solid #ccc; */
 		 }
 		 #icons_div, #usMap,#heatMap {
 			 white-space : nowrap;
@@ -92,7 +75,7 @@
 <body>
 	<p id="title" style = "font-weight: 300;
 	font-size: 36pt">DIVE INTO MENTAL HEALTH -- 2016
-	  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+	  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 		&nbsp<text style="font-size: 12px">Presented by <a href="https://github.com/yawendeng1/3300Proj1">The Mosaic </a></text>
 		<img src="Proj_Icon.svg" alt="Project Icon" width="100" align="bottom"></p>
 
@@ -564,7 +547,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 		var widths = [160, 140, 170, 220, 170, 120];
 		var icon_lg_svg_width = 110;
-		var labels = ["male", "female", "Neither of the two", "Heavy Drinker Only","Current Smoker Only", "Both"];
+		var labels = ["male", "female", "Neither of the two", "Only a Heavy Drinker","Only a Current Smoker", "Both"];
 		 var label_offset = [27, 32, 0, 10, 0, 34];
 
 
@@ -596,14 +579,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
 				var singlePath = d3.select("#"+paths_ids[k]).append("path")
 						.attr("d",paths[k])
 						.attr("transform","translate(20, 0)");
-
-
-			// 	var singlePath = d3.select("#"+paths_ids[k]).append("path")
-			// 			.attr("d",paths[k]);
-
-			// }
-
-
 
 			var stack = d3.stack().keys(["5", "4", "3", "2", "1"]);
 
@@ -655,8 +630,6 @@ d3.csv("MH.csv", parseline, function(error, data) {
 						 .attr("clip-path",
 						 "url(#" + paths_ids[k] + ")"
 					 );
-
-
 
 					// insert labels
 					sub_svg.append("text")
@@ -959,9 +932,6 @@ d3.select("#habit_explain").append("text")
 d3.select("#habit_explain").append("text")
 			 	.text("However, the usage of tobacco shows a significant negative impact.")
 			 	.attr("x", 10).attr("y", 40);
-
-
-
 
 		</script>
 
