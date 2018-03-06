@@ -34,6 +34,11 @@
 			 font-weight:100;
 			 font-size:24pt;
 		 }
+
+		 #title_h3, #title_h2{
+			 margin-top: 0;
+			 margin-bottom: 0;
+		 }
      .text{
 			 width:650px;
 			 margin:auto;
@@ -81,12 +86,18 @@
 		&nbsp<text style="font-size: 12px">Presented by <a href="https://github.com/yawendeng1/3300Proj1">The Mosaic </a></text>
 		<img src="Proj_Icon.svg" alt="Project Icon" width="100" align="bottom"></p>
 
+<<<<<<< HEAD
 		<h2 style="padding-left: 0px;color:#999">A look into <span class="Variant">Mental Health Status</span> of U.S. residents and possible underlying <span class="Variant">Factors</span>.</h2>
+||||||| merged common ancestors
+		<h2 style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
+=======
+		<h2 id="title_h2" style="padding-left: 0px;color:#999">A look into <span class="titleVariant">Mental Health Status</span> of U.S. residents and possible underlying <span class="titleVariant">Factors</span>.</h2>
+>>>>>>> b1be4e0c50cab8a65fecc8ab108defd8c74968d0
 
-		<h3 style="color:#999">
+		<h3 id="title_h3" style="color:#999">
 			Indicated by number of days not happy within <span class="inplot_text" style="font-size:30px">30 days</span>, for the year 2016.</h3>
 
-	<p id="subtitle"><h2>Overivew</h2></p>
+	<h2>Overivew</h2>
 	<svg class = "sessionT" width = "900", height = "60">
 		<rect class = "inplot_text" x="0", y = "3" width="20" height="20"/>
 		<text x="40" y="22" style = "font-weight:100;font-size:18pt">
@@ -273,7 +284,7 @@ d3.csv("MH16_1.csv", function(data) {
 		 svg.append("line")
 				.attr("x1", 260.5)
 				.attr("y1", 60.5)
-				.attr("x2", 140)
+				.attr("x2", 160)
 				.attr("y2", 60.5)
 				.attr("stroke", "#ccc")
 				.attr("stroke-width", 2);
@@ -350,7 +361,7 @@ d3.csv("MH16_1.csv", function(data) {
 
 	svgText1.append("text")
 				 .text("days")
-				 .attr("x", 110)
+				 .attr("x", 102)
 				 .attr("y", 100)
 				 .attr("stroke-width", 1);
 
@@ -365,20 +376,20 @@ d3.csv("MH16_1.csv", function(data) {
 	svgText1.append("text")
 				 .text("32.6%")
 				 .attr("x", 0)
-				 .attr("y", 170)
+				 .attr("y", 150)
 				 .attr("fill", "#243B83")
 			 	 .attr("font-size", 40);
 
 	svgText1.append("text")
 				 .text("have more than")
-				 .attr("x", 90)
-				 .attr("y", 170)
+				 .attr("x", 86)
+				 .attr("y", 150)
 				 .attr("stroke-width", 1);
 
 	svgText1.append("text")
 				 .text("15 unhappy days")
 				 .attr("x", 0)
-				 .attr("y", 200)
+				 .attr("y", 180)
 				 .attr("stroke-width", 1);
 
 </script>
@@ -549,7 +560,7 @@ d3.csv("MH.csv", parseline, function(error, data) {
 
 		var widths = [160, 140, 170, 220, 170, 120];
 		var icon_lg_svg_width = 110;
-		var labels = ["male", "female", "Neither of the two", "Only a Heavy Drinker","Only a Current Smoker", "Both"];
+		var labels = ["Male", "Female", "Neither of the two", "Only a Heavy Drinker","Only a Current Smoker", "Both"];
 		 var label_offset = [27, 32, 0, 10, 0, 34];
 
 
